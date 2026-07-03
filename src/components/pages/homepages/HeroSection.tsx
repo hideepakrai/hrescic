@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 import Button from "@/components/shared/Button";
+import EditableText from "@/components/shared/EditableText";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface HeroProps {
   heading: LocalizedString;
@@ -97,13 +99,9 @@ const MasonryShuffleBlocks: React.FC = () => {
 export default function HeroSection({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as HeroProps;
+  const { isEditable, handleChange } = useEditable(block.id);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
-
-  const heading = getLocalizedString(props.heading, locale);
-  const subheading = getLocalizedString(props.subheading, locale);
-  const primaryButtonText = getLocalizedString(props.primaryButtonText, locale);
-  const secondaryButtonText = getLocalizedString(props.secondaryButtonText, locale);
 
   if (!mounted) {
     return (
@@ -125,19 +123,31 @@ export default function HeroSection({ block }: { block: PageBlock }) {
           </div>
           <div className="relative grid min-h-[430px] items-center gap-12 px-6 py-8 sm:px-8 sm:py-10 md:px-8 lg:grid-cols-[1.02fr_.98fr] lg:gap-10 lg:px-14 lg:py-16">
             <div className="max-w-[525px] lg:ps-1">
-              <h1 className="font-sans text-[34px] font-[500] leading-[1.2] tracking-[-0.02em] text-white sm:text-[42px] md:text-[48px] lg:text-[50px] xl:text-[50px]">
-                {heading}
-              </h1>
-              <p className="mt-6 max-w-[470px] text-[14px] leading-7 text-white/80 sm:text-[15px] lg:text-[18px]">
-                {subheading}
-              </p>
+              <EditableText
+                text={props.heading?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`props.heading.${locale}`)}
+                tag="h1"
+                className="font-sans text-[34px] font-[500] leading-[1.2] tracking-[-0.02em] text-white sm:text-[42px] md:text-[48px] lg:text-[50px] xl:text-[50px]"
+                multiline
+              />
+              <EditableText
+                text={props.subheading?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`props.subheading.${locale}`)}
+                tag="p"
+                className="mt-6 max-w-[470px] text-[14px] leading-7 text-white/80 sm:text-[15px] lg:text-[18px]"
+                multiline
+              />
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button href={props.primaryButtonHref}>{primaryButtonText}</Button>
+                <Button href={props.primaryButtonHref}>
+                  <EditableText text={props.primaryButtonText?.[locale] || ""} editable={isEditable} onChange={handleChange(`props.primaryButtonText.${locale}`)} tag="span" />
+                </Button>
                 <Button href={props.secondaryButtonHref} variant="secondary">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full">
                     <FaPlay className="text-[12px]" />
                   </span>
-                  {secondaryButtonText}
+                  <EditableText text={props.secondaryButtonText?.[locale] || ""} editable={isEditable} onChange={handleChange(`props.secondaryButtonText.${locale}`)} tag="span" />
                 </Button>
               </div>
             </div>

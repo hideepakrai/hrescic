@@ -1,8 +1,10 @@
 "use client";
 
+import EditableText from "@/components/shared/EditableText";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface LogoCloudProps {
   sectionTitle: LocalizedString;
@@ -12,7 +14,7 @@ interface LogoCloudProps {
 export default function LogoCloud({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as LogoCloudProps;
-  const sectionTitle = getLocalizedString(props.sectionTitle, locale);
+  const { isEditable, handleChange } = useEditable(block.id);
   const logoList = props.logos || [];
   const mid = Math.ceil(logoList.length / 2);
   const topRow = logoList.slice(0, mid);
@@ -22,9 +24,13 @@ export default function LogoCloud({ block }: { block: PageBlock }) {
     <section className="w-full bg-white py-8 sm:py-10 lg:pt-4 lg:pb-12">
       <div className="container-xl mx-auto">
         <div className="mb-7 flex justify-center">
-          <p className="text-center text-[13px] italic font-normal text-[#666666] sm:text-[15px]">
-            {sectionTitle}
-          </p>
+          <EditableText
+            text={props.sectionTitle?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.sectionTitle.${locale}`)}
+            tag="p"
+            className="text-center text-[13px] italic font-normal text-[#666666] sm:text-[15px]"
+          />
         </div>
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">

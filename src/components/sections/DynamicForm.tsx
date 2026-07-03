@@ -4,6 +4,8 @@ import { useState, type FormEvent } from "react";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import EditableText from "@/components/shared/EditableText";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface FormField {
   id: string;
@@ -37,17 +39,11 @@ interface FormSectionProps {
 export default function DynamicForm({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as FormSectionProps;
+  const { isEditable, handleChange } = useEditable(block.id);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const fieldLayout = block.layout === "two_column" ? "grid grid-cols-1 md:grid-cols-2 gap-4" : "space-y-4";
-
-  const formHeading = getLocalizedString(props.formHeading, locale);
-  const formDescription = getLocalizedString(props.formDescription, locale);
-  const successHeading = getLocalizedString(props.successHeading, locale);
-  const successDescription = getLocalizedString(props.successDescription, locale);
-  const successButtonText = getLocalizedString(props.successButtonText, locale);
-  const submitText = getLocalizedString(props.form.settings.submitText, locale);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -80,11 +76,30 @@ export default function DynamicForm({ block }: { block: PageBlock }) {
     return (
       <section className="py-16 bg-white">
         <div className="container-xl mx-auto max-w-2xl text-center px-4">
-          <h2 className="text-3xl font-semibold text-[#223039] mb-4">{successHeading}</h2>
-          <p className="text-lg text-[#555555] mb-8">{successDescription}</p>
-          {successButtonText && (
+          <EditableText
+            text={props.successHeading?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.successHeading.${locale}`)}
+            tag="h2"
+            className="text-3xl font-semibold text-[#223039] mb-4"
+          />
+          <EditableText
+            text={props.successDescription?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.successDescription.${locale}`)}
+            tag="p"
+            className="text-lg text-[#555555] mb-8"
+            multiline
+          />
+          {(props.successButtonText?.[locale] || isEditable) && (
             <a href="/" className="inline-block rounded-full bg-[#41C717] hover:bg-[#3aa914] text-white px-6 py-3 text-sm font-medium transition-all">
-              {successButtonText}
+              <EditableText
+                text={props.successButtonText?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`props.successButtonText.${locale}`)}
+                tag="span"
+                className=""
+              />
             </a>
           )}
         </div>
@@ -96,8 +111,21 @@ export default function DynamicForm({ block }: { block: PageBlock }) {
     <section className="py-16 bg-white">
       <div className="container-xl mx-auto max-w-3xl px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-semibold text-[#223039] mb-4">{formHeading}</h2>
-          <p className="text-lg text-[#555555]">{formDescription}</p>
+          <EditableText
+            text={props.formHeading?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.formHeading.${locale}`)}
+            tag="h2"
+            className="text-3xl font-semibold text-[#223039] mb-4"
+          />
+          <EditableText
+            text={props.formDescription?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.formDescription.${locale}`)}
+            tag="p"
+            className="text-lg text-[#555555]"
+            multiline
+          />
         </div>
         <form onSubmit={handleSubmit} className={fieldLayout} noValidate>
           {props.form.fields.map((field) => {
@@ -142,7 +170,15 @@ export default function DynamicForm({ block }: { block: PageBlock }) {
               disabled={status === "submitting"}
               className="w-full rounded-full bg-[#41C717] hover:bg-[#3aa914] disabled:opacity-50 text-white h-[48px] text-sm font-medium transition-all"
             >
-              {status === "submitting" ? "Submitting..." : submitText}
+              {status === "submitting" ? "Submitting..." : (
+                <EditableText
+                  text={props.form.settings.submitText?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`props.form.settings.submitText.${locale}`)}
+                  tag="span"
+                  className=""
+                />
+              )}
             </button>
           </div>
         </form>

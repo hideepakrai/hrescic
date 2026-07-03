@@ -6,9 +6,11 @@ import { Play, ArrowRight } from "lucide-react";
 import YouTube, { type YouTubeProps } from "react-youtube";
 import Link from "next/link";
 import Button from "@/components/shared/Button";
+import EditableText from "@/components/shared/EditableText";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface ServiceCardsProps {
   sectionTitle: LocalizedString;
@@ -19,16 +21,12 @@ interface ServiceCardsProps {
 export default function ServiceCards({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as ServiceCardsProps;
+  const { isEditable, handleChange } = useEditable(block.id);
   const showreelBlock = block.content?.find((c) => c.type === "video-embed");
   const youtubeId = String(showreelBlock?.props?.youtubeId || "s879lJLEfW8");
 
   const sectionTitle = getLocalizedString(props.sectionTitle, locale);
   const sectionDescription = getLocalizedString(props.sectionDescription, locale);
-  const services = (props.services || []).map((s) => ({
-    ...s,
-    title: getLocalizedString(s.title, locale),
-    description: getLocalizedString(s.description, locale),
-  }));
 
   const [expanded, setExpanded] = useState(false);
   const [loadVideo, setLoadVideo] = useState(false);
@@ -72,12 +70,22 @@ export default function ServiceCards({ block }: { block: PageBlock }) {
     <section id="showreel-section" className="scroll-mt-24 bg-white px-4 py-16 md:px-10 md:py-10">
       <div className="container-xl mx-auto">
         <div className="mx-auto mb-12 max-w-2xl text-center md:mb-16">
-          <h2 className="mb-4 text-3xl font-semibold leading-[1.2] text-[#223039] md:text-[40px]">
-            {sectionTitle}
-          </h2>
-          <p className="text-lg text-[#555555] md:text-lg">
-            {sectionDescription}
-          </p>
+          <EditableText
+            text={props.sectionTitle?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.sectionTitle.${locale}`)}
+            tag="h2"
+            className="mb-4 text-3xl font-semibold leading-[1.2] text-[#223039] md:text-[40px]"
+            multiline
+          />
+          <EditableText
+            text={props.sectionDescription?.[locale] || ""}
+            editable={isEditable}
+            onChange={handleChange(`props.sectionDescription.${locale}`)}
+            tag="p"
+            className="text-lg text-[#555555] md:text-lg"
+            multiline
+          />
         </div>
 
         <motion.div layout transition={{ duration: 0.7, ease: "easeInOut" }}
@@ -116,20 +124,35 @@ export default function ServiceCards({ block }: { block: PageBlock }) {
           <motion.div layout transition={{ duration: 0.7, ease: "easeInOut" }}
             className={expanded ? "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4" : "grid grid-cols-1 gap-6 sm:grid-cols-2"}
           >
-            {services.map((service, i) => (
-              <motion.div layout key={service.title} className="flex h-full flex-col rounded-2xl border border-none bg-[#F3F3F3] p-6">
-                <h4 className="mb-2 text-lg font-bold text-[#1F1F1F]">{service.title}</h4>
-                <p className="mb-4 text-md text-[#4B4B4B]">{service.description}</p>
+            {(props.services || []).map((rawService, i) => {
+              return (
+              <motion.div layout key={i} className="flex h-full flex-col rounded-2xl border border-none bg-[#F3F3F3] p-6">
+                <EditableText
+                  text={rawService?.title?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`props.services.${i}.title.${locale}`)}
+                  tag="h4"
+                  className="mb-2 text-lg font-bold text-[#1F1F1F]"
+                />
+                <EditableText
+                  text={rawService?.description?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`props.services.${i}.description.${locale}`)}
+                  tag="p"
+                  className="mb-4 text-md text-[#4B4B4B]"
+                  multiline
+                />
                 <hr className="mt-auto" />
                 <Link 
-                  href={localizedHref(service.href)} 
+                  href={localizedHref(rawService.href)} 
                   className="group flex items-center gap-1.5 pt-2 text-sm font-semibold text-[#37C100] transition-all hover:text-[#2d9802]"
                 >
                   <span>{getButtonText(i, locale)}</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </motion.div>
-            ))}
+            );
+            })}
           </motion.div>
         </motion.div>
       </div>

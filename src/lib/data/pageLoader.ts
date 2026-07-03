@@ -27,7 +27,6 @@ import webDigitalJson from "./pages/what-we-do/sub/web-digital.json";
 import contentMarketingJson from "./pages/what-we-do/sub/content-marketing.json";
 import aiVideoProductionJson from "./pages/what-we-do/sub/ai-video-production.json";
 export const pageRegistry: Record<string, PageData> = {
-  home: homePageJson as PageData,
   "what-we-do": whatWeDoPageJson as PageData,
   "who-we-create-for": whoWeCreateForPageJson as PageData,
   "lets-talk": letsTalkPageJson as PageData,

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import EditableText from "@/components/shared/EditableText";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface LetsTalkFormProps {
   demo: {
@@ -98,38 +100,19 @@ function ReCaptcha({
 export default function LetsTalkForm({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const p = block.props as unknown as LetsTalkFormProps;
+  const { isEditable, handleChange } = useEditable(block.id);
 
   const resolved = {
     demo: {
-      panelTitle: getLocalizedString(p.demo.panelTitle, locale),
-      panelDescription: getLocalizedString(p.demo.panelDescription, locale),
-      nameLabel: getLocalizedString(p.demo.nameLabel, locale),
-      emailLabel: getLocalizedString(p.demo.emailLabel, locale),
-      companyLabel: getLocalizedString(p.demo.companyLabel, locale),
-      websiteLabel: getLocalizedString(p.demo.websiteLabel, locale),
-      messageLabel: getLocalizedString(p.demo.messageLabel, locale),
       messagePlaceholder: getLocalizedString(p.demo.messagePlaceholder, locale),
-      submitLabel: getLocalizedString(p.demo.submitLabel, locale),
       successMessage: getLocalizedString(p.demo.successMessage, locale),
       errorMessage: getLocalizedString(p.demo.errorMessage, locale),
-      noteText: getLocalizedString(p.demo.noteText, locale),
-      switchPrompt: getLocalizedString(p.demo.switchPrompt, locale),
-      switchLinkLabel: getLocalizedString(p.demo.switchLinkLabel, locale),
       switchHref: p.demo.switchHref,
     },
     ask: {
-      panelTitle: getLocalizedString(p.ask.panelTitle, locale),
-      panelDescription: getLocalizedString(p.ask.panelDescription, locale),
-      nameLabel: getLocalizedString(p.ask.nameLabel, locale),
-      emailLabel: getLocalizedString(p.ask.emailLabel, locale),
-      messageLabel: getLocalizedString(p.ask.messageLabel, locale),
       messagePlaceholder: getLocalizedString(p.ask.messagePlaceholder, locale),
-      submitLabel: getLocalizedString(p.ask.submitLabel, locale),
       successMessage: getLocalizedString(p.ask.successMessage, locale),
       errorMessage: getLocalizedString(p.ask.errorMessage, locale),
-      noteText: getLocalizedString(p.ask.noteText, locale),
-      switchPrompt: getLocalizedString(p.ask.switchPrompt, locale),
-      switchLinkLabel: getLocalizedString(p.ask.switchLinkLabel, locale),
       switchHref: p.ask.switchHref,
     },
     contact: p.contact,
@@ -220,22 +203,51 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-1 gap-6 overflow-hidden md:grid-cols-2">
             <div className="flex min-h-[520px] flex-col rounded-[20px] bg-[#37C100] p-8 text-white md:p-10">
-              <h4 className="text-xl font-semibold">{resolved.demo.panelTitle}</h4>
-              <p className="mt-6 text-base leading-relaxed text-white/90 md:text-lg">
-                {resolved.demo.panelDescription}
-              </p>
+              <EditableText
+                text={p.demo.panelTitle?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`p.demo.panelTitle.${locale}`)}
+                tag="h4"
+                className="text-xl font-semibold"
+              />
+              <EditableText
+                text={p.demo.panelDescription?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`p.demo.panelDescription.${locale}`)}
+                tag="p"
+                className="mt-6 text-base leading-relaxed text-white/90 md:text-lg"
+                multiline
+              />
               <div className="mt-auto space-y-4 pt-10 text-[14px] text-white/95">
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/mail.svg" alt="email" className="w-8" />
-                  <span>{resolved.contact.email}</span>
+                  <EditableText
+                    text={p.contact.email || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.email")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/phone.svg" alt="phone" className="w-8" />
-                  <span>{resolved.contact.phone}</span>
+                  <EditableText
+                    text={p.contact.phone || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.phone")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/map.svg" alt="location" className="w-8" />
-                  <span>{resolved.contact.location}</span>
+                  <EditableText
+                    text={p.contact.location || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.location")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
               </div>
             </div>
@@ -243,28 +255,66 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
             <div className="bg-white p-8 md:p-10">
               <form className="space-y-5" onSubmit={handleDemoSubmit}>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.demo.nameLabel}</span>
+                  <EditableText
+                    text={p.demo.nameLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.nameLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="text" className={inputCls} required value={demoForm.name} onChange={(e) => setDemoForm((prev) => ({ ...prev, name: e.target.value }))} />
                 </label>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.demo.emailLabel}</span>
+                  <EditableText
+                    text={p.demo.emailLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.emailLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="email" className={inputCls} required value={demoForm.email} onChange={(e) => setDemoForm((prev) => ({ ...prev, email: e.target.value }))} />
                 </label>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.demo.companyLabel}</span>
+                  <EditableText
+                    text={p.demo.companyLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.companyLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="text" className={inputCls} value={demoForm.company} onChange={(e) => setDemoForm((prev) => ({ ...prev, company: e.target.value }))} />
                 </label>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.demo.websiteLabel}</span>
+                  <EditableText
+                    text={p.demo.websiteLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.websiteLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="url" className={inputCls} value={demoForm.website} onChange={(e) => setDemoForm((prev) => ({ ...prev, website: e.target.value }))} />
                 </label>
                 <div className="space-y-1.5">
-                  <span className={labelTextCls}>{resolved.demo.messageLabel}</span>
+                  <EditableText
+                    text={p.demo.messageLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.messageLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <textarea rows={4} required minLength={3} value={demoForm.message} onChange={(e) => setDemoForm((prev) => ({ ...prev, message: e.target.value }))} placeholder={resolved.demo.messagePlaceholder} className="w-full resize-none rounded-md border border-black/10 p-3 text-sm outline-none focus:border-black/30 focus:ring-2 focus:ring-black/5" />
                 </div>
                 <button type="submit" disabled={demoSubmitting} className="inline-flex items-center gap-2 rounded-full bg-[#37C100] px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#2d9802] disabled:cursor-not-allowed disabled:opacity-70">
                   <img src="/assets/Image/mail2-icon.svg" alt="" />
-                  {demoSubmitting ? "Sending..." : resolved.demo.submitLabel}
+                  {demoSubmitting ? "Sending..." : (
+                    <EditableText
+                      text={p.demo.submitLabel?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`p.demo.submitLabel.${locale}`)}
+                      tag="span"
+                      className=""
+                    />
+                  )}
                 </button>
                 <ReCaptcha id="demo-captcha" checked={demoCaptcha} onCheck={setDemoCaptcha} label={resolved.captchaLabel} />
                 {demoFeedback && (
@@ -272,11 +322,30 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
                     {demoFeedback.text}
                   </p>
                 )}
-                <p className="text-[13px] text-[#555555]">{resolved.demo.noteText}</p>
+                <EditableText
+                  text={p.demo.noteText?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`p.demo.noteText.${locale}`)}
+                  tag="p"
+                  className="text-[13px] text-[#555555]"
+                  multiline
+                />
                 <p className="text-[13px] text-[#0F0F3D]">
-                  {resolved.demo.switchPrompt}{" "}
+                  <EditableText
+                    text={p.demo.switchPrompt?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.demo.switchPrompt.${locale}`)}
+                    tag="span"
+                    className=""
+                  />{" "}
                   <a href={resolved.demo.switchHref} className="font-medium text-[#37C100] hover:underline">
-                    {resolved.demo.switchLinkLabel}
+                    <EditableText
+                      text={p.demo.switchLinkLabel?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`p.demo.switchLinkLabel.${locale}`)}
+                      tag="span"
+                      className=""
+                    />
                   </a>
                 </p>
               </form>
@@ -290,22 +359,51 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-1 gap-6 overflow-hidden md:grid-cols-2">
             <div className="flex min-h-[480px] flex-col rounded-[20px] bg-[#0F0F3D] p-8 text-white md:p-10">
-              <h4 className="text-xl font-semibold">{resolved.ask.panelTitle}</h4>
-              <p className="mt-6 text-base leading-relaxed text-white/90 md:text-lg">
-                {resolved.ask.panelDescription}
-              </p>
+              <EditableText
+                text={p.ask.panelTitle?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`p.ask.panelTitle.${locale}`)}
+                tag="h4"
+                className="text-xl font-semibold"
+              />
+              <EditableText
+                text={p.ask.panelDescription?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`p.ask.panelDescription.${locale}`)}
+                tag="p"
+                className="mt-6 text-base leading-relaxed text-white/90 md:text-lg"
+                multiline
+              />
               <div className="mt-auto space-y-4 pt-10 text-[14px] text-white/95">
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/mail.svg" alt="email" className="w-8" />
-                  <span>{resolved.contact.email}</span>
+                  <EditableText
+                    text={p.contact.email || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.email")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/phone.svg" alt="phone" className="w-8" />
-                  <span>{resolved.contact.phone}</span>
+                  <EditableText
+                    text={p.contact.phone || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.phone")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
                 <div className="flex items-center gap-3">
                   <img src="/assets/Image/map.svg" alt="location" className="w-8" />
-                  <span>{resolved.contact.location}</span>
+                  <EditableText
+                    text={p.contact.location || ""}
+                    editable={isEditable}
+                    onChange={handleChange("p.contact.location")}
+                    tag="span"
+                    className=""
+                  />
                 </div>
               </div>
             </div>
@@ -313,20 +411,46 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
             <div className="rounded-[20px] bg-white p-8 md:p-10">
               <form className="space-y-5" onSubmit={handleAskSubmit}>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.ask.nameLabel}</span>
+                  <EditableText
+                    text={p.ask.nameLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.ask.nameLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="text" className={inputCls} required value={askForm.name} onChange={(e) => setAskForm((prev) => ({ ...prev, name: e.target.value }))} />
                 </label>
                 <label className={labelCls}>
-                  <span className={labelTextCls}>{resolved.ask.emailLabel}</span>
+                  <EditableText
+                    text={p.ask.emailLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.ask.emailLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <input type="email" className={inputCls} required value={askForm.email} onChange={(e) => setAskForm((prev) => ({ ...prev, email: e.target.value }))} />
                 </label>
                 <div className="space-y-1.5">
-                  <span className={labelTextCls}>{resolved.ask.messageLabel}</span>
+                  <EditableText
+                    text={p.ask.messageLabel?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.ask.messageLabel.${locale}`)}
+                    tag="span"
+                    className={labelTextCls}
+                  />
                   <textarea rows={4} required minLength={3} value={askForm.message} onChange={(e) => setAskForm((prev) => ({ ...prev, message: e.target.value }))} placeholder={resolved.ask.messagePlaceholder} className="w-full resize-none rounded-md border border-black/10 p-3 text-sm outline-none focus:border-black/30 focus:ring-2 focus:ring-black/5" />
                 </div>
                 <button type="submit" disabled={askSubmitting} className="inline-flex items-center gap-2 rounded-full bg-[#0F0F3D] px-6 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-[#1a1a5e] disabled:cursor-not-allowed disabled:opacity-70">
                   <img src="/assets/Image/mail2-icon.svg" alt="" />
-                  {askSubmitting ? "Sending..." : resolved.ask.submitLabel}
+                  {askSubmitting ? "Sending..." : (
+                    <EditableText
+                      text={p.ask.submitLabel?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`p.ask.submitLabel.${locale}`)}
+                      tag="span"
+                      className=""
+                    />
+                  )}
                 </button>
                 <ReCaptcha id="ask-captcha" checked={askCaptcha} onCheck={setAskCaptcha} label={resolved.captchaLabel} />
                 {askFeedback && (
@@ -334,11 +458,30 @@ export default function LetsTalkForm({ block }: { block: PageBlock }) {
                     {askFeedback.text}
                   </p>
                 )}
-                <p className="text-[13px] text-[#555555]">{resolved.ask.noteText}</p>
+                <EditableText
+                  text={p.ask.noteText?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`p.ask.noteText.${locale}`)}
+                  tag="p"
+                  className="text-[13px] text-[#555555]"
+                  multiline
+                />
                 <p className="text-[13px] text-[#0F0F3D]">
-                  {resolved.ask.switchPrompt}{" "}
+                  <EditableText
+                    text={p.ask.switchPrompt?.[locale] || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`p.ask.switchPrompt.${locale}`)}
+                    tag="span"
+                    className=""
+                  />{" "}
                   <a href={resolved.ask.switchHref} className="font-medium text-[#37C100] hover:underline">
-                    {resolved.ask.switchLinkLabel}
+                    <EditableText
+                      text={p.ask.switchLinkLabel?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`p.ask.switchLinkLabel.${locale}`)}
+                      tag="span"
+                      className=""
+                    />
                   </a>
                 </p>
               </form>

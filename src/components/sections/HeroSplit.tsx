@@ -1,8 +1,10 @@
 "use client";
 
+import EditableText from "@/components/shared/EditableText";
+import { useEditable } from "@/lib/store/pages/useEditable";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
-import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import type { LocalizedString } from "@/lib/i18n/locale";
 
 interface HeroSplitProps {
   heading: LocalizedString;
@@ -16,11 +18,7 @@ interface HeroSplitProps {
 export default function HeroSplit({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as HeroSplitProps;
-
-  const heading = getLocalizedString(props.heading, locale);
-  const subheading = getLocalizedString(props.subheading, locale);
-  const primaryButtonText = getLocalizedString(props.primaryButtonText, locale);
-  const secondaryButtonText = getLocalizedString(props.secondaryButtonText, locale);
+  const { isEditable, handleChange } = useEditable(block.id);
 
   return (
     <section className="w-full px-0 pt-3 sm:px-4 lg:px-5">
@@ -29,22 +27,41 @@ export default function HeroSplit({ block }: { block: PageBlock }) {
           <div className="grid md:grid-cols-[55%_45%] gap-10 items-center px-6 md:px-16 py-20">
             {/* Left Column: Content */}
             <div className="max-w-xl">
-              <h1 
+              <EditableText
+                text={props.heading?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`props.heading.${locale}`)}
+                tag="h1"
                 className="text-white font-sans text-3xl sm:text-4xl lg:text-[52px] leading-tight mb-6"
-                dangerouslySetInnerHTML={{ __html: heading }}
+                dangerouslySetInnerHTML
               />
-              <p className="text-gray-300 text-sm sm:text-base max-w-md mb-6 leading-relaxed">
-                {subheading}
-              </p>
+              <EditableText
+                text={props.subheading?.[locale] || ""}
+                editable={isEditable}
+                onChange={handleChange(`props.subheading.${locale}`)}
+                tag="p"
+                className="text-gray-300 text-sm sm:text-base max-w-md mb-6 leading-relaxed"
+                multiline
+              />
               <div className="flex items-center gap-4">
                 <a href={props.primaryButtonHref}>
                   <button className="bg-[#37C100] hover:bg-[#2d9802] text-white md:px-6 md:py-3 px-4 py-3 text-xs rounded-full md:text-sm font-medium transition-all duration-300">
-                    {primaryButtonText}
+                    <EditableText
+                      text={props.primaryButtonText?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`props.primaryButtonText.${locale}`)}
+                      tag="span"
+                    />
                   </button>
                 </a>
                 <a href={props.secondaryButtonHref}>
                   <button className="flex items-center gap-2 bg-[#FFFFFF1A] hover:bg-[#37C100] hover:text-white text-white md:px-6 md:py-3 px-5 py-3 text-xs rounded-full md:text-sm transition-all duration-300">
-                    {secondaryButtonText}
+                    <EditableText
+                      text={props.secondaryButtonText?.[locale] || ""}
+                      editable={isEditable}
+                      onChange={handleChange(`props.secondaryButtonText.${locale}`)}
+                      tag="span"
+                    />
                   </button>
                 </a>
               </div>

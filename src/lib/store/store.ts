@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import pagesReducer from "./pages/pagesSlice";
+import authReducer from "./auth/authSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       pages: pagesReducer,
+      auth: authReducer,
     },
   });
 };

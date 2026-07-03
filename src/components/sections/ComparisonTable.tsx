@@ -1,8 +1,10 @@
 "use client";
 
+import EditableText from "@/components/shared/EditableText";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface ComparisonTableProps {
   sectionTitle: LocalizedString;
@@ -21,48 +23,27 @@ const planKeys = ["start", "grow", "scale", "custom"] as const;
 export default function ComparisonTable({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as ComparisonTableProps;
-
-  const sectionTitle = getLocalizedString(props.sectionTitle, locale);
-  const sectionSubtitle = getLocalizedString(props.sectionSubtitle, locale);
-
-  const features = (props.features || []).map((f) => ({
-    name: getLocalizedString(f.name, locale),
-    start: getLocalizedString(f.start, locale),
-    grow: getLocalizedString(f.grow, locale),
-    scale: getLocalizedString(f.scale, locale),
-    custom: getLocalizedString(f.custom, locale),
-  }));
-
-  const renderCell = (val: string) => {
-    if (val === "✓") {
-      return <span className="text-[#37c100] font-bold">✓</span>;
-    }
-    if (val === "✓✓") {
-      return <span className="text-[#37c100] font-bold">✓✓</span>;
-    }
-    if (val.startsWith("✓ ")) {
-      return (
-        <span>
-          <span className="text-[#37c100] font-bold mr-1">✓</span>
-          <span className="font-medium text-gray-900">{val.substring(2)}</span>
-        </span>
-      );
-    }
-    if (val === "–") {
-      return <span className="text-gray-400 font-medium">–</span>;
-    }
-    return <span>{val}</span>;
-  };
+  const { isEditable, handleChange } = useEditable(block.id);
 
   return (
     <section className="container-xl mx-auto py-16 space-y-6">
       <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-light tracking-tight text-gray-800">
-          {sectionTitle}
-        </h2>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-          {sectionSubtitle}
-        </p>
+        <EditableText
+          text={props.sectionTitle?.[locale] || ""}
+          editable={isEditable}
+          onChange={handleChange(`props.sectionTitle.${locale}`)}
+          tag="h2"
+          className="text-3xl md:text-4xl font-light tracking-tight text-gray-800"
+          multiline
+        />
+        <EditableText
+          text={props.sectionSubtitle?.[locale] || ""}
+          editable={isEditable}
+          onChange={handleChange(`props.sectionSubtitle.${locale}`)}
+          tag="p"
+          className="mt-4 max-w-2xl mx-auto text-lg text-gray-600"
+          multiline
+        />
       </div>
 
       <div className="overflow-hidden">
@@ -90,22 +71,32 @@ export default function ComparisonTable({ block }: { block: PageBlock }) {
                 </div>
 
                 {/* Body Rows */}
-                {features.map((feature, index) => {
+                {(props.features || []).map((feature, index) => {
                   const bgClass = index % 2 === 0 ? "bg-white/80" : "bg-transparent";
                   return (
                     <div
-                      key={feature.name}
+                      key={index}
                       className={`grid grid-cols-[1.6fr_1fr_1fr_1fr_1fr] text-xs md:text-sm text-[#4A4267] ${bgClass} hover:bg-gray-50/50 transition-colors duration-200`}
                     >
                       <div className="px-4 py-3 border-b border-gray-100 font-semibold text-gray-900">
-                        {feature.name}
+                        <EditableText
+                          text={feature.name?.[locale] || ""}
+                          editable={isEditable}
+                          onChange={handleChange(`props.features.${index}.name.${locale}`)}
+                          tag="span"
+                        />
                       </div>
                       {planKeys.map((key) => (
                         <div
                           key={key}
                           className="px-4 py-3 border-b border-gray-100 font-normal"
                         >
-                          {renderCell(feature[key])}
+                          <EditableText
+                            text={(feature as any)[key]?.[locale] || ""}
+                            editable={isEditable}
+                            onChange={handleChange(`props.features.${index}.${key}.${locale}`)}
+                            tag="span"
+                          />
                         </div>
                       ))}
                     </div>

@@ -1,8 +1,10 @@
 "use client";
 
+import EditableText from "@/components/shared/EditableText";
+import { useEditable } from "@/lib/store/pages/useEditable";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
-import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import type { LocalizedString } from "@/lib/i18n/locale";
 
 interface CtaSubPageProps {
   headline: LocalizedString;
@@ -12,20 +14,28 @@ interface CtaSubPageProps {
 export default function CtaSubPage({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as CtaSubPageProps;
-
-  const headline = getLocalizedString(props.headline, locale);
-  const subtext = getLocalizedString(props.subtext, locale);
+  const { isEditable, handleChange } = useEditable(block.id);
 
   return (
     <section className="w-full pb-14 mb-8 md:mt-10 mt-20 px-4 md:px-0">
       <div className="md:max-w-[80%] max-w-[100%] mx-auto bg-gray-100 rounded-2xl text-center px-6 py-16 md:py-20">
-        <span className="text-2xl sm:text-3xl md:text-[36px] font-semibold text-[#2F2A4A] mb-5 block">
-          {headline}
-        </span>
+        <EditableText
+          text={props.headline?.[locale] || ""}
+          editable={isEditable}
+          onChange={handleChange(`props.headline.${locale}`)}
+          tag="span"
+          className="text-2xl sm:text-3xl md:text-[36px] font-semibold text-[#2F2A4A] mb-5 block"
+          multiline
+        />
 
-        <p className="text-sm md:text-base text-[#6B6785] mb-8 mt-6">
-          {subtext}
-        </p>
+        <EditableText
+          text={props.subtext?.[locale] || ""}
+          editable={isEditable}
+          onChange={handleChange(`props.subtext.${locale}`)}
+          tag="p"
+          className="text-sm md:text-base text-[#6B6785] mb-8 mt-6"
+          multiline
+        />
 
         <div className="flex justify-center items-center gap-4 flex-wrap">
           <a href="/lets-talk#demo">

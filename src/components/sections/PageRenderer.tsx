@@ -3,13 +3,14 @@
 import type { LocaleCode } from "@/lib/i18n/locale";
 import { LocaleProvider } from "@/lib/i18n/LocaleContext";
 import type { PageBlock } from "@/lib/data/pageLoader";
-import HeroSection from "./HeroSection";
-import LogoCloud from "./LogoCloud";
-import ServiceCards from "./ServiceCards";
-import IndustryCards from "./IndustryCards";
-import StatsBar from "./StatsBar";
-import PortfolioGrid from "./PortfolioGrid";
-import CtaCentered from "./CtaCentered";
+import { useAppSelector } from "@/lib/store/hooks";
+import HeroSection from "@/components/pages/homepages/HeroSection";
+import LogoCloud from "@/components/pages/homepages/LogoCloud";
+import ServiceCards from "@/components/pages/homepages/ServiceCards";
+import IndustryCards from "@/components/pages/homepages/IndustryCards";
+import StatsBar from "@/components/pages/homepages/StatsBar";
+import PortfolioGrid from "@/components/pages/homepages/PortfolioGrid";
+import CtaCentered from "@/components/pages/homepages/CtaCentered";
 import HeroSplit from "./HeroSplit";
 import ServiceTable from "./ServiceTable";
 import ProcessSteps from "./ProcessSteps";
@@ -17,7 +18,7 @@ import PricingTable from "./PricingTable";
 import ComparisonTable from "./ComparisonTable";
 import DynamicForm from "./DynamicForm";
 import ContactInfo from "./ContactInfo";
-import VideoEmbed from "./VideoEmbed";
+import VideoEmbed from "@/components/pages/homepages/VideoEmbed";
 import IndustryDetailCards from "./IndustryDetailCards";
 import HeroCentered from "./HeroCentered";
 import LetsTalkForm from "./LetsTalkForm";
@@ -56,9 +57,11 @@ const sectionRegistry: Record<string, React.FC<{ block: PageBlock }>> = {
 };
 
 export default function PageRenderer({ sections, locale }: { sections: PageBlock[]; locale: LocaleCode }) {
+  const reduxSections = useAppSelector((state) => state.pages.currentPages?.content) as PageBlock[] | undefined;
+  const activeSections = reduxSections ?? sections;
   return (
     <LocaleProvider locale={locale}>
-      {sections.map((block) => {
+      {activeSections.map((block) => {
         const Section = sectionRegistry[block.type];
         if (!Section) {
           console.warn(`Unknown section type: ${block.type}`);

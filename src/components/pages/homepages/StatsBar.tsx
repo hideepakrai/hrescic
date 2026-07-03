@@ -1,9 +1,11 @@
 "use client";
 
 import Button from "@/components/shared/Button";
+import EditableText from "@/components/shared/EditableText";
 import type { PageBlock } from "@/lib/data/pageLoader";
 import { useLocale } from "@/lib/i18n/LocaleContext";
 import { getLocalizedString, type LocalizedString } from "@/lib/i18n/locale";
+import { useEditable } from "@/lib/store/pages/useEditable";
 
 interface StatsBarProps {
   background: string;
@@ -15,10 +17,7 @@ interface StatsBarProps {
 export default function StatsBar({ block }: { block: PageBlock }) {
   const locale = useLocale();
   const props = block.props as unknown as StatsBarProps;
-  const stats = (props.stats || []).map((s) => ({
-    ...s,
-    label: getLocalizedString(s.label, locale),
-  }));
+  const { isEditable, handleChange } = useEditable(block.id);
 
   return (
     <section className="bg-white py-16 md:py-18">
@@ -28,14 +27,25 @@ export default function StatsBar({ block }: { block: PageBlock }) {
            Delivering on-demand excellence <br></br>for brands around the world
           </h3>
           <div className="mb-10 grid grid-cols-1 gap-8 md:mb-12 md:grid-cols-3 md:gap-12">
-            {stats.map((stat) => (
-              <div key={stat.label}>
+            {(props.stats || []).map((stat, i) => (
+              <div key={i}>
                 <div className="mb-2 text-[#41C717]">
-                  <h3 className="text-4xl font-semibold lg:text-[50px]">{stat.value}</h3>
+                  <EditableText
+                    text={stat.value || ""}
+                    editable={isEditable}
+                    onChange={handleChange(`props.stats.${i}.value`)}
+                    tag="h3"
+                    className="text-4xl font-semibold lg:text-[50px]"
+                  />
                 </div>
-                <p className="mx-auto max-w-[250px] text-[14px] font-light text-white">
-                  {stat.label}
-                </p>
+                <EditableText
+                  text={stat.label?.[locale] || ""}
+                  editable={isEditable}
+                  onChange={handleChange(`props.stats.${i}.label.${locale}`)}
+                  tag="p"
+                  className="mx-auto max-w-[250px] text-[14px] font-light text-white"
+                  multiline
+                />
               </div>
             ))}
           </div>
