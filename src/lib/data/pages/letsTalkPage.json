@@ -1,0 +1,76 @@
+{
+  "metaTitle": { "en": "Let's Talk | Hrescic", "hr": "Kontakt | Hrescic" },
+  "metaDescription": { "en": "Contact Hrescic — book a demo or ask a question.", "hr": "Kontaktirajte Hrescic — rezervirajte demo ili postavite pitanje." },
+  "sections": [
+    {
+      "id": "lt-hero-001",
+      "type": "hero-centered",
+      "layout": "centered",
+      "adminTitle": "Hero",
+      "props": {
+        "heading": { "en": "Let's talk on your terms.", "hr": "Razgovarajmo pod vašim uvjetima." },
+        "subheading": { "en": "Whether you're ready to move forward or just exploring your options, we'll meet you there.", "hr": "Bilo da ste spremni krenuti naprijed ili samo istražujete opcije." }
+      }
+    },
+    {
+      "id": "lt-form-demo-001",
+      "type": "lets-talk-form",
+      "layout": "two_column",
+      "adminTitle": "Let's Talk Forms Section",
+      "props": {
+        "demo": {
+          "panelTitle": { "en": "Book a Discovery Call", "hr": "Rezervirajte Upoznavajući Poziv" },
+          "panelDescription": { "en": "Tell us a bit about your business and we'll tailor the call to what matters. No pitch, just clarity.", "hr": "Recite nam nešto o svom poslovanju i prilagodit ćemo poziv onome što je važno. Bez prodaje, samo jasnoća." },
+          "nameLabel": { "en": "Name", "hr": "Ime" },
+          "emailLabel": { "en": "Email", "hr": "Email" },
+          "companyLabel": { "en": "Company (optional)", "hr": "Tvrtka (opcionalno)" },
+          "websiteLabel": { "en": "Website (optional)", "hr": "Web stranica (opcionalno)" },
+          "messageLabel": { "en": "What would you like to improve?", "hr": "Što biste željeli poboljšati?" },
+          "messagePlaceholder": { "en": "Tell us about your goals...", "hr": "Recite nam o svojim ciljevima..." },
+          "submitLabel": { "en": "Book My Demo", "hr": "Rezerviraj Demo" },
+          "successMessage": { "en": "Thanks! We'll be in touch within 24 hours.", "hr": "Hvala! Javit ćemo se u roku od 24 sata." },
+          "errorMessage": { "en": "Something went wrong. Please try again.", "hr": "Nešto je pošlo po zlu. Molimo pokušajte ponovno." },
+          "noteText": { "en": "No spam — we respect your inbox.", "hr": "Bez spama — poštujemo vašu pristiglu poštu." },
+          "switchPrompt": { "en": "Just have a quick question?", "hr": "Imate samo brzo pitanje?" },
+          "switchLinkLabel": { "en": "Ask us anything", "hr": "Pitajte nas bilo što" },
+          "switchHref": "#ask"
+        },
+        "ask": {
+          "panelTitle": { "en": "Ask us anything", "hr": "Pitajte nas bilo što" },
+          "panelDescription": { "en": "No pressure and no sales pitch, just clarity on what makes sense for your brand.", "hr": "Bez pritiska i bez prodajnih govora, samo jasnoća o tome što ima smisla za vaš brend." },
+          "nameLabel": { "en": "Name", "hr": "Ime" },
+          "emailLabel": { "en": "Email", "hr": "Email" },
+          "messageLabel": { "en": "What do you need help with?", "hr": "S čime vam treba pomoć?" },
+          "messagePlaceholder": { "en": "Tell us what you're looking for...", "hr": "Recite nam što tražite..." },
+          "submitLabel": { "en": "Send My Question", "hr": "Pošalji Pitanje" },
+          "successMessage": { "en": "Question received! We'll get back to you within 24 hours.", "hr": "Pitanje zaprimljeno! Javit ćemo vam se u roku od 24 sata." },
+          "errorMessage": { "en": "Something went wrong. Please try again.", "hr": "Nešto je pošlo po zlu. Molimo pokušajte ponovno." },
+          "noteText": { "en": "No spam — we respect your inbox.", "hr": "Bez spama — poštujemo vašu pristiglu poštu." },
+          "switchPrompt": { "en": "Want to see how we can help?", "hr": "Želite vidjeti kako vam možemo pomoći?" },
+          "switchLinkLabel": { "en": "Book a demo", "hr": "Rezervirajte demo" },
+          "switchHref": "#demo"
+        },
+        "contact": {
+          "email": "tea@hrescic.com",
+          "phone": "+385 99 686 1721",
+          "location": "Samobor, Croatia"
+        },
+        "captchaLabel": { "en": "I'm not a robot", "hr": "Nisam robot" }
+      }
+    },
+    {
+      "id": "lt-what-to-expect-001",
+      "type": "what-to-expect",
+      "layout": "full",
+      "adminTitle": "What to Expect",
+      "props": {
+        "heading": { "en": "What happens next?", "hr": "Što se dalje događa?" },
+        "items": [
+          { "text": { "en": "You'll get a reply within 24 hours.", "hr": "Dobit ćete odgovor u roku od 24 sata." } },
+          { "text": { "en": "No pressure — just clarity.", "hr": "Bez pritiska — samo jasnoća." } },
+          { "text": { "en": "If there's a fit, we'll map next steps.", "hr": "Ako postoji uklapanje, mapirat ćemo sljedeće korake." } }
+        ]
+      }
+    }
+  ]
+}

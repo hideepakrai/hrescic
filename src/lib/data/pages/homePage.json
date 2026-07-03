@@ -1,0 +1,329 @@
+{
+  "metaTitle": { "en": "Hrescic | Creative and Strategy Agency", "hr": "Hrescic | Kreativna i Strateška Agencija" },
+  "metaDescription": { "en": "Hrescic is a creative and strategy agency helping brands grow with focused design and marketing execution.", "hr": "Hrescic je kreativna i strateška agencija koja pomaže brendovima rasti kroz fokusiran dizajn i marketinšku izvedbu." },
+  "sections": [
+    {
+      "id": "hero-001",
+      "type": "hero",
+      "layout": "split-overlay",
+      "adminTitle": "Hero Section",
+      "props": {
+        "heading": {
+          "en": "Elite Marketing Expertise, Ready When You Need It",
+          "hr": "Elite Marketing Ekspertiza, spremna kad vam zatreba"
+        },
+        "subheading": {
+          "en": "Access premium creative and strategic talent that integrates seamlessly with your business, precisely when, and how you need it.",
+          "hr": "Pristupite premium kreativnim i strateškim talentima koji se neprimjetno integriraju s vašim poslovanjem, točno onda i onako kako vam je potrebno."
+        },
+        "primaryButtonText": {
+          "en": "Let's Talk",
+          "hr": "Razgovarajmo"
+        },
+        "primaryButtonHref": "/lets-talk",
+        "secondaryButtonText": {
+          "en": "Play Showreel",
+          "hr": "Pogledajte showreel"
+        },
+        "secondaryButtonHref": "#showreel-section",
+        "backgroundOverlay": "#1D2931"
+      }
+    },
+    {
+      "id": "trust-bar-001",
+      "type": "logo-cloud",
+      "layout": "grid",
+      "adminTitle": "Trusted By Logos",
+      "props": {
+        "sectionTitle": {
+          "en": "Trusted by Industry Professionals From:",
+          "hr": "Povjerenje stručnjaka iz industrije:"
+        },
+        "logos": [
+          { "src": "/assets/logo/HBS-styleguide-primary-logo-3-1024x507 1.svg", "alt": "Harvard Business School" },
+          { "src": "/assets/logo/hult-logo.svg", "alt": "Hult International Business School" },
+          { "src": "/assets/logo/HBS-logo-greyscale 1.svg", "alt": "Henley Business School" },
+          { "src": "/assets/logo/logo-2.svg", "alt": "London Business School" },
+          { "src": "/assets/logo/logo-4.svg", "alt": "Principles Ray Dalio" },
+          { "src": "/assets/logo/hogan-logo 1.svg", "alt": "Hogan" },
+          { "src": "/assets/logo/Link → Početna.svg", "alt": "Profil Klett" },
+          { "src": "/assets/logo/Logo-5.svg", "alt": "Coaching.com" },
+          { "src": "/assets/logo/tis-main-logo 2.svg", "alt": "TIS Grupa" },
+          { "src": "/assets/logo/Layer_1.svg", "alt": "Pliva Teva" },
+          { "src": "/assets/logo/Isolation_Mode.svg", "alt": "Novartis" },
+          { "src": "/assets/logo/kroati-logo.svg", "alt": "Kroati" },
+          { "src": "/assets/logo/logo10.svg", "alt": "Profil Klett" }
+        ]
+      }
+    },
+    {
+      "id": "services-001",
+      "type": "service-cards",
+      "layout": "2x2-grid",
+      "adminTitle": "What We Do",
+      "props": {
+        "sectionTitle": {
+          "en": "What We Do",
+          "hr": "Što radimo"
+        },
+        "sectionDescription": {
+          "en": "We combine brand strategy, web design and content to build creative systems - not one-off campaigns. Pick what you need, or plug us in as your ongoing team.",
+          "hr": "Kombiniramo strategiju brenda, web dizajn i sadržaj za izgradnju kreativnih sustava - ne jednokratnih kampanja. Odaberite što vam treba ili nas uključite kao svoj stalni tim."
+        },
+        "services": [
+          {
+            "title": { "en": "Branding & Strategy", "hr": "Branding i strategija" },
+            "description": { "en": "Build clarity, consistency and a voice people remember.", "hr": "Izgradite jasnoću, dosljednost i glas koji ljudi pamte." },
+            "color": "#37C100",
+            "href": "/what-we-do"
+          },
+          {
+            "title": { "en": "Web & Digital", "hr": "Web i digital" },
+            "description": { "en": "Websites and booking experiences designed to convert - not just exist.", "hr": "Web stranice i iskustva rezervacije dizajnirana da konvertiraju - ne samo da postoje." },
+            "color": "#37C100",
+            "href": "/what-we-do"
+          },
+          {
+            "title": { "en": "Content & Marketing", "hr": "Sadržaj i marketing" },
+            "description": { "en": "Content that compounds: social, email, campaigns and analytics.", "hr": "Sadržaj koji se umnožava: društvene mreže, email, kampanje i analitika." },
+            "color": "#37C100",
+            "href": "/what-we-do"
+          },
+          {
+            "title": { "en": "AI Video Production", "hr": "AI Video produkcija" },
+            "description": { "en": "Turn photos into cinematic stories. Faster, smarter, and finally affordable.", "hr": "Pretvorite fotografije u filmske priče. Brže, pametnije i konačno pristupačno." },
+            "color": "#37C100",
+            "href": "/what-we-do"
+          }
+        ]
+      },
+      "content": [
+        {
+          "id": "showreel-001",
+          "type": "video-embed",
+          "layout": "full",
+          "adminTitle": "Showreel",
+          "props": {
+            "videoUrl": "https://img.youtube.com/vi/s879lJLEfW8/maxresdefault.jpg",
+            "youtubeId": "s879lJLEfW8"
+          }
+        }
+      ]
+    },
+    {
+      "id": "industries-001",
+      "type": "industry-cards",
+      "layout": "4-col-grid",
+      "adminTitle": "Who We Create For",
+      "props": {
+        "sectionTitle": {
+          "en": "Who We Create For",
+          "hr": "Za koga stvaramo"
+        },
+        "sectionDescription": {
+          "en": "We work with forward-thinking businesses across tourism, health, beauty, charter and boutique industries - keeping them visible, trustworthy and alive.",
+          "hr": "Radimo s naprednim tvrtkama u industrijama turizma, zdravlja, ljepote, chartera i boutique proizvoda - održavajući ih vidljivima, pouzdanima i živima."
+        },
+        "industries": [
+          {
+            "slug": "tourism-travel",
+            "title": { "en": "Tourism & Travel", "hr": "Turizam i putovanja" },
+            "image": "/assets/Image/travel.png",
+            "description": {
+              "en": "For brands that host the world. We help villas, boutique hotels, rental agencies, and yacht charters boost bookings and visibility.",
+              "hr": "Za brendove koji ugošćuju svijet. Pomažemo vilama, boutique hotelima, agencijama za iznajmljivanje i charterima jahti da povećaju broj rezervacija i vidljivost."
+            },
+            "buttonText": { "en": "See tourism projects", "hr": "Pogledajte turističke projekte" }
+          },
+          {
+            "slug": "education-e-learning",
+            "title": { "en": "Learning & Development", "hr": "Učenje i razvoj" },
+            "image": "/assets/Image/learning.png",
+            "description": {
+              "en": "For brands that educate professionals to reach their goals. Complete marketing funnel services to capture, nurture and convert leads into course sales.",
+              "hr": "Za brendove koji educiraju profesionalce da postignu svoje ciljeve. Kompletne usluge marketinškog lijevka za privlačenje, njegovanje i pretvaranje upita u prodaju tečajeva."
+            },
+            "buttonText": { "en": "Explore educational projects", "hr": "Istražite edukacijske projekte" }
+          },
+          {
+            "slug": "health-pharma-beauty",
+            "title": { "en": "Health, Pharma & Beauty", "hr": "Zdravlje, farmacija i ljepota" },
+            "image": "/assets/Image/Beauty.png",
+            "description": {
+              "en": "For brands that build trust through care. From clinics to pharma and beauty — clarity, empathy, credibility.",
+              "hr": "Za brendove koji grade povjerenje kroz brigu. Od klinika do farmacije i ljepote — jasnoća, empatija, vjerodostojnost."
+            },
+            "buttonText": { "en": "See health & beauty work", "hr": "Pogledajte projekte zdravlja i ljepote" }
+          },
+          {
+            "slug": "local-boutique-brands",
+            "title": { "en": "Local & Boutique Brands", "hr": "Lokalni i boutique brendovi" },
+            "image": "/assets/Image/local-Boutique.png",
+            "description": {
+              "en": "For makers, doers and dreamers. Authentic identities and digital presence for independent brands.",
+              "hr": "Za stvaraoce, činitelje i sanjare. Autentični identiteti i digitalna prisutnost za neovisne brendove."
+            },
+            "buttonText": { "en": "Discover boutique projects", "hr": "Otkrijte butik projekte" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "stats-001",
+      "type": "stats-bar",
+      "layout": "centered-dark",
+      "adminTitle": "Stats Section",
+      "props": {
+        "background": "#1D2931",
+        "textColor": "#FFFFFF",
+        "accentColor": "#41C717",
+        "stats": [
+          {
+            "value": "$52M+",
+            "label": {
+              "en": "in revenue - helped achieved for clients in driving their portfolios",
+              "hr": "u prihodima - pomogli smo klijentima u vođenju njihovih portfelja"
+            }
+          },
+          {
+            "value": "12.000+",
+            "label": {
+              "en": "digital products and services delivered",
+              "hr": "isporučenih digitalnih proizvoda i usluga"
+            }
+          },
+          {
+            "value": "2.300+",
+            "label": {
+              "en": "hours of video materials edited, animated and postproduced",
+              "hr": "sati video materijala uređenih, animiranih i postproduciranih"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "portfolio-001",
+      "type": "portfolio-grid",
+      "layout": "masonry",
+      "adminTitle": "Brands We Partner With",
+      "props": {
+        "sectionTitle": {
+          "en": "Brands We Partner With",
+          "hr": "Brendovi s kojima surađujemo"
+        },
+        "sectionDescription": {
+          "en": "From luxury tourism to local craftsmanship - we work with brands that value strategy, creativity and measurable outcomes.",
+          "hr": "Od luksuznog turizma do lokalne radinosti - radimo s brendovima koji cijene strategiju, kreativnost i mjerljive rezultate."
+        },
+        "items": [
+          {
+            "title": { "en": "Coaching.com", "hr": "Coaching.com" },
+            "category": { "en": "Illustration Design, eBook & Digital Reports", "hr": "Dizajn ilustracija, e-knjige i digitalni izvještaji" },
+            "image": "/assets/Image/img1.png",
+            "href": "/who-we-create-for/cdc"
+          },
+          {
+            "title": { "en": "MySkin & Poliderma", "hr": "MySkin & Poliderma" },
+            "category": { "en": "Illustration Design, eBook & Digital Reports", "hr": "Dizajn ilustracija, e-knjige i digitalni izvještaji" },
+            "image": "/assets/Image/Rectangle 1815.png",
+            "href": "/who-we-create-for/poliderma"
+          },
+          {
+            "title": { "en": "Castania", "hr": "Castania" },
+            "category": { "en": "Illustration Design, eBook & Digital Reports", "hr": "Dizajn ilustracija, e-knjige i digitalni izvještaji" },
+            "image": "/assets/Image/Rectangle 1831.png",
+            "href": "/who-we-create-for/castania"
+          },
+          {
+            "title": { "en": "Navada", "hr": "Navada" },
+            "category": { "en": "Illustration Design, storyboard", "hr": "Dizajn ilustracija, storyboard" },
+            "image": "/assets/Image/Rectangle 1813.png",
+            "href": "/who-we-create-for/navada"
+          },
+          {
+            "title": { "en": "L'oreal Revitalift", "hr": "L'oreal Revitalift" },
+            "category": { "en": "Direction and Storyboard", "hr": "Režija i storyboard" },
+            "image": "/assets/Image/Rectangle 1814.png",
+            "href": "/who-we-create-for/loreal"
+          },
+          {
+            "title": { "en": "Minglanje V Klanjcu", "hr": "Minglanje V Klanjcu" },
+            "category": { "en": "Direction, Design", "hr": "Režija, dizajn" },
+            "image": "/assets/Image/Rectangle1828.png",
+            "href": "/who-we-create-for/minglanje-v-klanjcu"
+          },
+          {
+            "title": { "en": "Karlo Ban", "hr": "Karlo Ban" },
+            "category": { "en": "Illustration Design, eBook & Digital Reports", "hr": "Dizajn ilustracija, e-knjige i digitalni izvještaji" },
+            "image": "/assets/Image/Rectangle 1821.png",
+            "href": "/who-we-create-for/karlo-ban"
+          },
+          {
+            "title": { "en": "Samoborski Tamburatorij", "hr": "Samoborski Tamburatorij" },
+            "category": { "en": "Illustration Design, eBook & Digital Reports", "hr": "Dizajn ilustracija, e-knjige i digitalni izvještaji" },
+            "image": "/assets/Image/Rectangle 1832.png",
+            "href": "/who-we-create-for/local-boutique-brands"
+          },
+          {
+            "title": { "en": "MyRent - Case Study", "hr": "MyRent - Case Study" },
+            "category": { "en": "Concept, direction and storyboard", "hr": "Koncept, režija i storyboard" },
+            "image": "/assets/Image/Rectangle 1826.png",
+            "href": "/who-we-create-for/myrent"
+          },
+          {
+            "title": { "en": "Vila Lovelos", "hr": "Vila Lovelos" },
+            "category": { "en": "Direction, Design", "hr": "Režija, dizajn" },
+            "image": "/assets/Image/Frame.png",
+            "href": "/who-we-create-for/tourism-travel"
+          },
+          {
+            "title": { "en": "Marcia Reynolds", "hr": "Marcia Reynolds" },
+            "category": { "en": "Direction, Design", "hr": "Režija, dizajn" },
+            "image": "/assets/Image/Rectangle 1827.png",
+            "href": "/who-we-create-for/education-e-learning"
+          },
+          {
+            "title": { "en": "EXO - Life and Beyond Story", "hr": "EXO - Life and Beyond Story" },
+            "category": { "en": "Concept, direction and storyboard", "hr": "Koncept, režija i storyboard" },
+            "image": "/assets/Image/Rectangle 1876.png",
+            "href": "/who-we-create-for/expo-life-far-beyond"
+          },
+          {
+            "title": { "en": "IDS Branding", "hr": "IDS Branding" },
+            "category": { "en": "Direction, Design", "hr": "Režija, dizajn" },
+            "image": "/assets/Image/Rectangle 1878.png",
+            "href": "/who-we-create-for/ids"
+          },
+          {
+            "title": { "en": "Casa Horizontes", "hr": "Casa Horizontes" },
+            "category": { "en": "Direction, Design", "hr": "Režija, dizajn" },
+            "image": "/assets/Image/Rectangle 1879.png",
+            "href": "/who-we-create-for/tourism-travel"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cta-001",
+      "type": "cta-centered",
+      "layout": "centered",
+      "adminTitle": "Final CTA",
+      "props": {
+        "heading": {
+          "en": "Marketing Excellence That Works On Your Terms",
+          "hr": "Marketinška izvrsnost koja funkcionira po vašim uvjetima"
+        },
+        "description": {
+          "en": "Because great marketing doesn't stop — it evolves. Whether you need a website that books guests, a video that tells your story, or a full creative system that scales with you — we're here to help your brand stay relevant, consistent and alive.",
+          "hr": "Zato što odličan marketing ne prestaje — on evoluira. Bilo da trebate web stranicu koja rezervira goste, video koji priča vašu priču ili potpuni kreativni sustav koji raste s vama — tu smo da vaš brend ostane relevantan, dosljedan i živ."
+        },
+        "buttonText": {
+          "en": "Let's Talk",
+          "hr": "Razgovarajmo"
+        },
+        "buttonHref": "/lets-talk"
+      }
+    }
+  ]
+}

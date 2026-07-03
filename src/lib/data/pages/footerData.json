@@ -1,0 +1,46 @@
+{
+  "background": "#0F172A",
+  "textColor": "#CBD5E1",
+  "accentColor": "#37C100",
+  "columns": [
+    {
+      "title": { "en": "Explore", "hr": "Istražite" },
+      "links": [
+        { "label": { "en": "What We Do", "hr": "Što Radimo" }, "href": "/what-we-do" },
+        { "label": { "en": "Who We Create For", "hr": "Za Koga Stvaramo" }, "href": "/who-we-create-for" },
+        { "label": { "en": "Ideas & Insights", "hr": "Ideje i Uvidi" }, "href": "/Ideas-Insights" },
+        { "label": { "en": "Let's Talk", "hr": "Kontakt" }, "href": "/lets-talk" }
+      ]
+    },
+    {
+      "title": { "en": "Connect", "hr": "Povežite se" },
+      "links": [
+        { "label": { "en": "tea@hrescic.com", "hr": "tea@hrescic.com" }, "href": "mailto:tea@hrescic.com", "icon": "Email" },
+        { "label": { "en": "+385 99 686 1721", "hr": "+385 99 686 1721" }, "href": "tel:+385996861721", "icon": "Phone" },
+        { "label": { "en": "Samobor, Croatia", "hr": "Samobor, Hrvatska" }, "href": "#", "icon": "MapPin" }
+      ]
+    },
+    {
+      "title": { "en": "Follow", "hr": "Pratite nas" },
+      "links": [
+        { "label": { "en": "LinkedIn", "hr": "LinkedIn" }, "href": "https://www.linkedin.com/in/tea-hre%C5%A1%C4%8Di%C4%87/", "icon": "LinkedIn" },
+        { "label": { "en": "Instagram", "hr": "Instagram" }, "href": "https://www.instagram.com/hrescic_agency/", "icon": "Instagram" },
+        { "label": { "en": "Facebook", "hr": "Facebook" }, "href": "https://www.facebook.com/profile.php?id=100070323768269", "icon": "Facebook" },
+        { "label": { "en": "YouTube", "hr": "YouTube" }, "href": "https://www.youtube.com/@hrescic", "icon": "YouTube" }
+      ]
+    }
+  ],
+  "bottomBar": {
+    "copyright": { "en": "© {year} Hrescic.com. All rights reserved.", "hr": "© {year} Hrescic. Sva prava pridržana." },
+    "madeWith": { "en": "Made with strategy, storytelling & strong coffee in Samobor. ☕", "hr": "Napravljeno s jasnoćom. Izgrađeno za rast." },
+    "links": []
+  },
+  "social": [
+    { "platform": "Email", "url": "mailto:tea@hrescic.com" },
+    { "platform": "Phone", "url": "tel:+385996861721" },
+    { "platform": "LinkedIn", "url": "https://www.linkedin.com/in/tea-hre%C5%A1%C4%8Di%C4%87/" },
+    { "platform": "Instagram", "url": "https://www.instagram.com/hrescic_agency/" },
+    { "platform": "Facebook", "url": "https://www.facebook.com/profile.php?id=100070323768269" },
+    { "platform": "YouTube", "url": "https://www.youtube.com/@hrescic" }
+  ]
+}

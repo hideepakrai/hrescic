@@ -1,20 +1,23 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# Karlo Ban UI (Vite + React + Tailwind + Framer Motion)
 
-This contains everything you need to run your app locally.
+Imported approximately 23 images from karlo-ban-website.zip
 
-View your app in AI Studio: https://ai.studio/apps/71b3e0b3-a5c1-419a-b259-f9129d3e7461
+## Quick Start
+```bash
+npm i
+npm run dev
+```
+Open http://localhost:5173
 
-## Run Locally
+## Structure
+- `src/components/ui/*` — shadcn-like primitives (Button, Card, Tabs, Accordion)
+- `src/components/sections/*` — animated reusable sections
+- `src/pages/*` — `HomePage.tsx` and `ProductPage.tsx`
+- `src/App.tsx` — simple page switcher (Home / Product)
+- `public/assets/*` — images (replace with your real assets)
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Notes
+- Font: Inter (loaded in `index.html`)
+- Brand orange: `#FF7020`
+- Replace placeholders with real assets or update paths.

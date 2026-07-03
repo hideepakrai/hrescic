@@ -1,0 +1,203 @@
+{
+  "metaTitle": { "en": "AI Video Production | Hrescic", "hr": "AI Video Produkcija | Hrescic" },
+  "metaDescription": { "en": "AI-powered video systems for continuous content production. Concept, generation, adaptation and scaling.", "hr": "AI video sustavi za kontinuiranu produkciju sadržaja. Koncept, generacija, adaptacija i skaliranje." },
+  "sections": [
+    {
+      "id": "av-hero-001",
+      "type": "hero-sub-page",
+      "layout": "default",
+      "adminTitle": "Hero",
+      "props": {
+        "heading": { "en": "Video is no longer\nproduction.It's scale.", "hr": "Video više nije\nprodukcija.To je skaliranje." },
+        "subheading": { "en": "Traditional video is slow and expensive. We build AI-powered video systems that let you produce, test and scale content continuously.", "hr": "Tradicionalni video je spor i skup. Gradimo AI video sustave koji vam omogućuju kontinuiranu produkciju, testiranje i skaliranje sadržaja." },
+        "primaryButtonText": { "en": "Book a Video Strategy Call", "hr": "Rezervirajte Poziv za Video Strategiju" },
+        "primaryButtonHref": "/lets-talk#demo",
+        "secondaryButtonText": { "en": "Ask Us Anything", "hr": "Pitajte Nas Bilo Što" },
+        "secondaryButtonHref": "/lets-talk#ask",
+        "reviewNote": { "en": "We review your current setup before the call.", "hr": "Pregledavamo vašu trenutnu postavku prije poziva." }
+      }
+    },
+    {
+      "id": "av-system-001",
+      "type": "feature-grid",
+      "layout": "4-col",
+      "adminTitle": "System Explanation",
+      "props": {
+        "title": { "en": "What an AI video system actually includes", "hr": "Što AI video sustav zapravo uključuje" },
+        "columns": [
+          {
+            "title": { "en": "Concept & Direction", "hr": "Koncept i Smjer" },
+            "description": { "en": "Defines what to communicate and why it matters.", "hr": "Definira što komunicirati i zašto je to važno." }
+          },
+          {
+            "title": { "en": "AI Production", "hr": "AI Produkcija" },
+            "description": { "en": "Generates video variations quickly and efficiently.", "hr": "Generira video varijacije brzo i učinkovito." }
+          },
+          {
+            "title": { "en": "Content Adaptation", "hr": "Adaptacija Sadržaja" },
+            "description": { "en": "Adjusts formats for different platforms and audiences.", "hr": "Prilagođava formate za različite platforme i publike." }
+          },
+          {
+            "title": { "en": "Scaling & Testing", "hr": "Skaliranje i Testiranje" },
+            "description": { "en": "Improves performance through iteration.", "hr": "Poboljšava performanse kroz iteraciju." }
+          }
+        ]
+      }
+    },
+    {
+      "id": "av-flow-001",
+      "type": "practical-flow",
+      "layout": "4-step",
+      "adminTitle": "Practical Flow",
+      "props": {
+        "headline": { "en": "How AI video works in practice", "hr": "Kako AI video funkcionira u praksi" },
+        "subtext": { "en": "AI video is not about automation alone — it's about building a system where content can be produced, tested and improved continuously.", "hr": "AI video nije samo o automatizaciji — radi se o izgradnji sustava gdje se sadržaj može kontinuirano proizvoditi, testirati i poboljšavati." },
+        "items": [
+          {
+            "highlight": { "en": "Concept & Script", "hr": "Koncept i Skripta" },
+            "text": { "en": "Defines message, tone and structure.", "hr": "Definira poruku, ton i strukturu." }
+          },
+          {
+            "highlight": { "en": "AI Generation", "hr": "AI Generacija" },
+            "text": { "en": "Produces multiple video variations.", "hr": "Proizvodi višestruke video varijacije." }
+          },
+          {
+            "highlight": { "en": "Distribution Ready Formats", "hr": "Formati Spremni za Distribuciju" },
+            "text": { "en": "Adapts content for platforms and channels.", "hr": "Prilagođava sadržaj za platforme i kanale." }
+          },
+          {
+            "highlight": { "en": "Testing & Optimization", "hr": "Testiranje i Optimizacija" },
+            "text": { "en": "Improves results based on performance data.", "hr": "Poboljšava rezultate na temelju podataka o performansama." }
+          }
+        ]
+      }
+    },
+    {
+      "id": "av-advantage-001",
+      "type": "feature-grid",
+      "layout": "4-col",
+      "adminTitle": "Production Advantage",
+      "props": {
+        "title": { "en": "Built for speed, flexibility and scale", "hr": "Izgrađeno za brzinu, fleksibilnost i skaliranje" },
+        "columns": [
+          {
+            "title": { "en": "Faster Production", "hr": "Brža Produkcija" },
+            "description": { "en": "Content created in hours, not weeks.", "hr": "Sadržaj kreiran u satima, ne tjednima." }
+          },
+          {
+            "title": { "en": "Lower Cost per Asset", "hr": "Niži Trošak po Sadržaju" },
+            "description": { "en": "More content without increasing budget.", "hr": "Više sadržaja bez povećanja proračuna." }
+          },
+          {
+            "title": { "en": "Infinite Variations", "hr": "Beskonačne Varijacije" },
+            "description": { "en": "Multiple versions for testing and targeting.", "hr": "Više verzija za testiranje i ciljanje." }
+          },
+          {
+            "title": { "en": "Scalable Output", "hr": "Skalabilni Output" },
+            "description": { "en": "Consistent production without bottlenecks.", "hr": "Dosljedna produkcija bez uskih grla." }
+          }
+        ]
+      }
+    },
+    {
+      "id": "av-plans-001",
+      "type": "pricing-table",
+      "layout": "4-col",
+      "adminTitle": "Plans & Deliverables",
+      "props": {
+        "sectionTitle": { "en": "Plans & Deliverables", "hr": "Plans & Deliverables" },
+        "sectionSubtitle": { "en": "Choose the plan that matches where your brand is right now", "hr": "Choose the plan that matches where your brand is right now" },
+        "plans": [
+          {
+            "name": { "en": "START", "hr": "START" },
+            "problemSolved": { "en": "You're not getting the sales or inquiries you should.", "hr": "You're not getting the sales or inquiries you should." },
+            "subText": { "en": "People aren't clearly understanding your offer or your value.", "hr": "People aren't clearly understanding your offer or your value." },
+            "foundation": [
+              { "en": "Brand & website audit", "hr": "Brand & website audit" },
+              { "en": "Clear messaging + value proposition", "hr": "Clear messaging + value proposition" },
+              { "en": "One high-impact landing page or core update", "hr": "One high-impact landing page or core update" },
+              { "en": "Initial AI video or visual assets", "hr": "Initial AI video or visual assets" }
+            ],
+            "monthly": [
+              { "en": "Essential updates", "hr": "Essential updates" },
+              { "en": "Light launch support", "hr": "Light launch support" },
+              { "en": "Small conversion-focused improvements", "hr": "Small conversion-focused improvements" }
+            ],
+            "idealIf": { "en": "A clear setup and steady inquiries - without heavy monthly production.", "hr": "A clear setup and steady inquiries - without heavy monthly production." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "GROW", "hr": "GROW" },
+            "problemSolved": { "en": "You're getting clients - but not consistently or not the right ones.", "hr": "You're getting clients - but not consistently or not the right ones." },
+            "subText": { "en": "Your communication isn't attracting the audience you want.", "hr": "Your communication isn't attracting the audience you want." },
+            "foundation": [
+              { "en": "Deep brand & website review", "hr": "Deep brand & website review" },
+              { "en": "Messaging & positioning refinement", "hr": "Messaging & positioning refinement" },
+              { "en": "Setup of content formats, tone and templates", "hr": "Setup of content formats, tone and templates" }
+            ],
+            "monthly": [
+              { "en": "Regular social + email content", "hr": "Regular social + email content" },
+              { "en": "Monthly design + copy support", "hr": "Monthly design + copy support" },
+              { "en": "Ongoing AI video refresh", "hr": "Ongoing AI video refresh" },
+              { "en": "Website + funnel optimisation", "hr": "Website + funnel optimisation" },
+              { "en": "Monthly insights", "hr": "Monthly insights" }
+            ],
+            "idealIf": { "en": "A reliable flow of high-quality clients and a consistent brand presence.", "hr": "A reliable flow of high-quality clients and a consistent brand presence." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "SCALE", "hr": "SCALE" },
+            "problemSolved": { "en": "You already have demand - but your creative workload is chaos.", "hr": "You already have demand - but your creative workload is chaos." },
+            "subText": { "en": "Too many tasks, too many channels, no unified system.", "hr": "Too many tasks, too many channels, no unified system." },
+            "foundation": [
+              { "en": "Strategic workshop", "hr": "Strategic workshop" },
+              { "en": "Brand system refinement", "hr": "Brand system refinement" },
+              { "en": "Funnel & journey mapping", "hr": "Funnel & journey mapping" },
+              { "en": "Multi-channel content strategy", "hr": "Multi-channel content strategy" }
+            ],
+            "monthly": [
+              { "en": "High-volume content + design", "hr": "High-volume content + design" },
+              { "en": "Continuous UX/web improvements", "hr": "Continuous UX/web improvements" },
+              { "en": "Multi-channel campaigns", "hr": "Multi-channel campaigns" },
+              { "en": "Strategy + analytics calls", "hr": "Strategy + analytics calls" },
+              { "en": "AI video integrated in every cycle", "hr": "AI video integrated in every cycle" }
+            ],
+            "idealIf": { "en": "A full creative department - without hiring a full creative department.", "hr": "A full creative department - without hiring a full creative department." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "CUSTOM", "hr": "CUSTOM" },
+            "problemSolved": { "en": "You have internal people - but no partner who sees the whole system.", "hr": "You have internal people - but no partner who sees the whole system." },
+            "subText": { "en": "", "hr": "" },
+            "foundation": [
+              { "en": "Full ecosystem review", "hr": "Full ecosystem review" },
+              { "en": "Internal alignment", "hr": "Internal alignment" },
+              { "en": "Long-term roadmap", "hr": "Long-term roadmap" }
+            ],
+            "monthly": [
+              { "en": "Hybrid execution (in-house + precise)", "hr": "Hybrid execution (in-house + precise)" },
+              { "en": "Unified content + web + design + video", "hr": "Unified content + web + design + video" },
+              { "en": "Ongoing leadership & optimisation", "hr": "Ongoing leadership & optimisation" }
+            ],
+            "idealIf": { "en": "A strategic partner who connects the dots across your entire ecosystem.", "hr": "A strategic partner who connects the dots across your entire ecosystem." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#ask"
+          }
+        ]
+      }
+    },
+    {
+      "id": "av-cta-001",
+      "type": "cta-sub-page",
+      "layout": "centered",
+      "adminTitle": "Final CTA",
+      "props": {
+        "headline": { "en": "Scale content without scaling production chaos", "hr": "Skalirajte sadržaj bez skaliranja produkcijskog kaosa" },
+        "subtext": { "en": "Let's build a video system that actually performs.", "hr": "Izgradimo video sustav koji zapravo djeluje." }
+      }
+    }
+  ]
+}

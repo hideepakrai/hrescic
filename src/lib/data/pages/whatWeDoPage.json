@@ -1,0 +1,227 @@
+{
+  "metaTitle": { "en": "What We Do", "hr": "Što radimo" },
+  "metaDescription": { "en": "SEO and slug settings only", "hr": "SEO and slug settings only" },
+  "sections": [
+    {
+      "id": "wwd-hero-001",
+      "type": "hero-split",
+      "layout": "split",
+      "adminTitle": "Hero",
+      "props": {
+        "heading": { "en": "Creative systems that<br/>keep your brand alive.", "hr": "Creative systems that<br/>keep your brand alive." },
+        "subheading": { "en": "We build brands, websites, content and video that work together – not in fragments. Clear, aligned and conversion-focused.", "hr": "We build brands, websites, content and video that work together – not in fragments. Clear, aligned and conversion-focused." },
+        "primaryButtonText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+        "primaryButtonHref": "/lets-talk#demo",
+        "secondaryButtonText": { "en": "Ask Us Anything", "hr": "Ask Us Anything" },
+        "secondaryButtonHref": "/lets-talk#ask"
+      }
+    },
+    {
+      "id": "wwd-logos-001",
+      "type": "logo-cloud",
+      "layout": "grid",
+      "adminTitle": "Trusted By Logos",
+      "props": {
+        "sectionTitle": { "en": "Trusted by Industry Professionals From:", "hr": "Povjerenje stručnjaka iz industrije:" },
+        "logos": [
+          { "src": "/assets/logo/HBS-styleguide-primary-logo-3-1024x507 1.svg", "alt": "Harvard Business School" },
+          { "src": "/assets/logo/hult-logo.svg", "alt": "Hult International Business School" },
+          { "src": "/assets/logo/HBS-logo-greyscale 1.svg", "alt": "Henley Business School" },
+          { "src": "/assets/logo/logo-2.svg", "alt": "London Business School" },
+          { "src": "/assets/logo/logo-4.svg", "alt": "Principles Ray Dalio" },
+          { "src": "/assets/logo/hogan-logo 1.svg", "alt": "Hogan" },
+          { "src": "/assets/logo/Link → Početna.svg", "alt": "Profil Klett" },
+          { "src": "/assets/logo/Logo-5.svg", "alt": "Coaching.com" },
+          { "src": "/assets/logo/tis-main-logo 2.svg", "alt": "TIS Grupa" },
+          { "src": "/assets/logo/Layer_1.svg", "alt": "Pliva Teva" },
+          { "src": "/assets/logo/Isolation_Mode.svg", "alt": "Novartis" },
+          { "src": "/assets/logo/kroati-logo.svg", "alt": "Kroati" },
+          { "src": "/assets/logo/logo10.svg", "alt": "Profil Klett" }
+        ]
+      }
+    },
+    {
+      "id": "wwd-services-001",
+      "type": "service-table",
+      "layout": "comparison",
+      "adminTitle": "Service Overview Table",
+      "props": {
+        "sectionTitle": { "en": "What We Do", "hr": "What We Do" },
+        "sectionDescription": {
+          "en": "Your brand, website, content and video all need to work as one system.\nWe align these four areas to attract the right clients and create consistent growth.",
+          "hr": "Your brand, website, content and video all need to work as one system.\nWe align these four areas to attract the right clients and create consistent growth."
+        },
+        "services": [
+          {
+            "name": { "en": "Branding & Strategy", "hr": "Branding & Strategy" },
+            "problem": { "en": "People don't quickly understand your value.", "hr": "People don't quickly understand your value." },
+            "deliverable": { "en": "Positioning, messaging, tone of voice, visual identity.", "hr": "Positioning, messaging, tone of voice, visual identity." },
+            "impact": { "en": "Creates clarity — the foundation for conversion.", "hr": "Creates clarity — the foundation for conversion." }
+          },
+          {
+            "name": { "en": "Web & Digital", "hr": "Web & Digital" },
+            "problem": { "en": "Your website looks good but doesn't perform.", "hr": "Your website looks good but doesn't perform." },
+            "deliverable": { "en": "UX/UI, landing pages, full websites, booking flows, SEO.", "hr": "UX/UI, landing pages, full websites, booking flows, SEO." },
+            "impact": { "en": "Turns clarity into action (leads, bookings, sales).", "hr": "Turns clarity into action (leads, bookings, sales)." }
+          },
+          {
+            "name": { "en": "Content & Marketing", "hr": "Content & Marketing" },
+            "problem": { "en": "You're visible, but not consistently or to the right people.", "hr": "You're visible, but not consistently or to the right people." },
+            "deliverable": { "en": "Social content, emails, blogs, campaigns, analytics.", "hr": "Social content, emails, blogs, campaigns, analytics." },
+            "impact": { "en": "Builds trust, demand and long-term momentum.", "hr": "Builds trust, demand and long-term momentum." }
+          },
+          {
+            "name": { "en": "AI Video Production", "hr": "AI Video Production" },
+            "problem": { "en": "Hard to stand out in a crowded market.", "hr": "Hard to stand out in a crowded market." },
+            "deliverable": { "en": "Hero videos, social clips, variations, monthly refresh.", "hr": "Hero videos, social clips, variations, monthly refresh." },
+            "impact": { "en": "Adds emotional impact and boosts conversions.", "hr": "Adds emotional impact and boosts conversions." }
+          }
+        ]
+      }
+    },
+    {
+      "id": "wwd-process-001",
+      "type": "process-steps",
+      "layout": "horizontal-steps",
+      "adminTitle": "How Subscription Works",
+      "props": {
+        "sectionTitle": { "en": "How Our Subscription Model Works", "hr": "How Our Subscription Model Works" },
+        "subheading": {
+          "en": "Every plan includes a one-time setup that fixes your foundation and a monthly rhythm that keeps your brand consistent and performing.",
+          "hr": "Every plan includes a one-time setup that fixes your foundation and a monthly rhythm that keeps your brand consistent and performing."
+        },
+        "steps": [
+          { "title": { "en": "WE CLARIFY", "hr": "WE CLARIFY" }, "description": { "en": "what's working, what's not and what your priorities are.", "hr": "what's working, what's not and what your priorities are." } },
+          { "title": { "en": "WE CREATE", "hr": "WE CREATE" }, "description": { "en": "or fix the key assets your brand needs most.", "hr": "or fix the key assets your brand needs most." } },
+          { "title": { "en": "WE MAINTAIN", "hr": "WE MAINTAIN" }, "description": { "en": "in a consistent monthly creative cycle.", "hr": "in a consistent monthly creative cycle." } },
+          { "title": { "en": "WE SCALE", "hr": "WE SCALE" }, "description": { "en": "what works with campaigns, testing and improvements.", "hr": "what works with campaigns, testing and improvements." } }
+        ]
+      }
+    },
+    {
+      "id": "wwd-plans-001",
+      "type": "pricing-table",
+      "layout": "4-col",
+      "adminTitle": "Plans & Deliverables",
+      "props": {
+        "sectionTitle": { "en": "Plans & Deliverables", "hr": "Plans & Deliverables" },
+        "sectionSubtitle": { "en": "Choose the plan that matches where your brand is right now", "hr": "Choose the plan that matches where your brand is right now" },
+        "plans": [
+          {
+            "name": { "en": "START", "hr": "START" },
+            "problemSolved": { "en": "You're not getting the sales or inquiries you should.", "hr": "You're not getting the sales or inquiries you should." },
+            "subText": { "en": "People aren't clearly understanding your offer or your value.", "hr": "People aren't clearly understanding your offer or your value." },
+            "foundation": [
+              { "en": "Brand & website audit", "hr": "Brand & website audit" },
+              { "en": "Clear messaging + value proposition", "hr": "Clear messaging + value proposition" },
+              { "en": "One high-impact landing page or core update", "hr": "One high-impact landing page or core update" },
+              { "en": "Initial AI video or visual assets", "hr": "Initial AI video or visual assets" }
+            ],
+            "monthly": [
+              { "en": "Essential updates", "hr": "Essential updates" },
+              { "en": "Light launch support", "hr": "Light launch support" },
+              { "en": "Small conversion-focused improvements", "hr": "Small conversion-focused improvements" }
+            ],
+            "idealIf": { "en": "A clear setup and steady inquiries - without heavy monthly production.", "hr": "A clear setup and steady inquiries - without heavy monthly production." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "GROW", "hr": "GROW" },
+            "problemSolved": { "en": "You're getting clients - but not consistently or not the right ones.", "hr": "You're getting clients - but not consistently or not the right ones." },
+            "subText": { "en": "Your communication isn't attracting the audience you want.", "hr": "Your communication isn't attracting the audience you want." },
+            "foundation": [
+              { "en": "Deep brand & website review", "hr": "Deep brand & website review" },
+              { "en": "Messaging & positioning refinement", "hr": "Messaging & positioning refinement" },
+              { "en": "Setup of content formats, tone and templates", "hr": "Setup of content formats, tone and templates" }
+            ],
+            "monthly": [
+              { "en": "Regular social + email content", "hr": "Regular social + email content" },
+              { "en": "Monthly design + copy support", "hr": "Monthly design + copy support" },
+              { "en": "Ongoing AI video refresh", "hr": "Ongoing AI video refresh" },
+              { "en": "Website + funnel optimisation", "hr": "Website + funnel optimisation" },
+              { "en": "Monthly insights", "hr": "Monthly insights" }
+            ],
+            "idealIf": { "en": "A reliable flow of high-quality clients and a consistent brand presence.", "hr": "A reliable flow of high-quality clients and a consistent brand presence." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "SCALE", "hr": "SCALE" },
+            "problemSolved": { "en": "You already have demand - but your creative workload is chaos.", "hr": "You already have demand - but your creative workload is chaos." },
+            "subText": { "en": "Too many tasks, too many channels, no unified system.", "hr": "Too many tasks, too many channels, no unified system." },
+            "foundation": [
+              { "en": "Strategic workshop", "hr": "Strategic workshop" },
+              { "en": "Brand system refinement", "hr": "Brand system refinement" },
+              { "en": "Funnel & journey mapping", "hr": "Funnel & journey mapping" },
+              { "en": "Multi-channel content strategy", "hr": "Multi-channel content strategy" }
+            ],
+            "monthly": [
+              { "en": "High-volume content + design", "hr": "High-volume content + design" },
+              { "en": "Continuous UX/web improvements", "hr": "Continuous UX/web improvements" },
+              { "en": "Multi-channel campaigns", "hr": "Multi-channel campaigns" },
+              { "en": "Strategy + analytics calls", "hr": "Strategy + analytics calls" },
+              { "en": "AI video integrated in every cycle", "hr": "AI video integrated in every cycle" }
+            ],
+            "idealIf": { "en": "A full creative department - without hiring a full creative department.", "hr": "A full creative department - without hiring a full creative department." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#demo"
+          },
+          {
+            "name": { "en": "CUSTOM", "hr": "CUSTOM" },
+            "problemSolved": { "en": "You have internal people - but no partner who sees the whole system.", "hr": "You have internal people - but no partner who sees the whole system." },
+            "subText": { "en": "", "hr": "" },
+            "foundation": [
+              { "en": "Full ecosystem review", "hr": "Full ecosystem review" },
+              { "en": "Internal alignment", "hr": "Internal alignment" },
+              { "en": "Long-term roadmap", "hr": "Long-term roadmap" }
+            ],
+            "monthly": [
+              { "en": "Hybrid execution (in-house + precise)", "hr": "Hybrid execution (in-house + precise)" },
+              { "en": "Unified content + web + design + video", "hr": "Unified content + web + design + video" },
+              { "en": "Ongoing leadership & optimisation", "hr": "Ongoing leadership & optimisation" }
+            ],
+            "idealIf": { "en": "A strategic partner who connects the dots across your entire ecosystem.", "hr": "A strategic partner who connects the dots across your entire ecosystem." },
+            "ctaText": { "en": "Book a Free Demo", "hr": "Book a Free Demo" },
+            "ctaHref": "/lets-talk#ask"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wwd-comparison-001",
+      "type": "comparison-table",
+      "layout": "full",
+      "adminTitle": "Plan Comparison Table",
+      "props": {
+        "sectionTitle": { "en": "Compare All Plans", "hr": "Compare All Plans" },
+        "sectionSubtitle": { "en": "See exactly what each plan includes — side by side.", "hr": "See exactly what each plan includes — side by side." },
+        "features": [
+          { "name": { "en": "Main issue solved", "hr": "Main issue solved" }, "start": { "en": "Low inquiries / unclear value", "hr": "Low inquiries / unclear value" }, "grow": { "en": "Wrong clients / inconsistent demand", "hr": "Wrong clients / inconsistent demand" }, "scale": { "en": "Creative chaos / overload", "hr": "Creative chaos / overload" }, "custom": { "en": "Complex ecosystem", "hr": "Complex ecosystem" } },
+          { "name": { "en": "Brand messaging", "hr": "Brand messaging" }, "start": { "en": "✓ Basic clarity", "hr": "✓ Basic clarity" }, "grow": { "en": "✓ Full refinement", "hr": "✓ Full refinement" }, "scale": { "en": "✓ System-wide alignment", "hr": "✓ System-wide alignment" }, "custom": { "en": "✓ Custom messaging system", "hr": "✓ Custom messaging system" } },
+          { "name": { "en": "Visual alignment", "hr": "Visual alignment" }, "start": { "en": "Light refresh", "hr": "Light refresh" }, "grow": { "en": "Cleanup + harmonisation", "hr": "Cleanup + harmonisation" }, "scale": { "en": "System refinement", "hr": "System refinement" }, "custom": { "en": "Multi-brand alignment", "hr": "Multi-brand alignment" } },
+          { "name": { "en": "Website / landing setup", "hr": "Website / landing setup" }, "start": { "en": "1 landing page or update", "hr": "1 landing page or update" }, "grow": { "en": "Cleanup + optimisation", "hr": "Cleanup + optimisation" }, "scale": { "en": "Multiple updates + new sections", "hr": "Multiple updates + new sections" }, "custom": { "en": "Full website build / rebuild", "hr": "Full website build / rebuild" } },
+          { "name": { "en": "Content system setup", "hr": "Content system setup" }, "start": { "en": "–", "hr": "–" }, "grow": { "en": "Formats + templates", "hr": "Formats + templates" }, "scale": { "en": "Multi-channel system", "hr": "Multi-channel system" }, "custom": { "en": "Custom-developed", "hr": "Custom-developed" } },
+          { "name": { "en": "Monthly content", "hr": "Monthly content" }, "start": { "en": "Light", "hr": "Light" }, "grow": { "en": "Regular", "hr": "Regular" }, "scale": { "en": "High-volume", "hr": "High-volume" }, "custom": { "en": "Custom", "hr": "Custom" } },
+          { "name": { "en": "Monthly design", "hr": "Monthly design" }, "start": { "en": "Light", "hr": "Light" }, "grow": { "en": "✓", "hr": "✓" }, "scale": { "en": "✓✓", "hr": "✓✓" }, "custom": { "en": "Custom", "hr": "Custom" } },
+          { "name": { "en": "AI video", "hr": "AI video" }, "start": { "en": "Starter set", "hr": "Starter set" }, "grow": { "en": "Monthly refresh", "hr": "Monthly refresh" }, "scale": { "en": "Fully integrated", "hr": "Fully integrated" }, "custom": { "en": "Bespoke video cycles", "hr": "Bespoke video cycles" } },
+          { "name": { "en": "Website optimisation", "hr": "Website optimisation" }, "start": { "en": "Light tweaks", "hr": "Light tweaks" }, "grow": { "en": "Ongoing", "hr": "Ongoing" }, "scale": { "en": "Continuous CRO", "hr": "Continuous CRO" }, "custom": { "en": "Deep, custom-level", "hr": "Deep, custom-level" } },
+          { "name": { "en": "Campaign support", "hr": "Campaign support" }, "start": { "en": "–", "hr": "–" }, "grow": { "en": "Light", "hr": "Light" }, "scale": { "en": "Full, multi-channel", "hr": "Full, multi-channel" }, "custom": { "en": "Custom", "hr": "Custom" } },
+          { "name": { "en": "Performance & Speed", "hr": "Performance & Speed" }, "start": { "en": "Standard", "hr": "Standard" }, "grow": { "en": "Optimised", "hr": "Optimised" }, "scale": { "en": "High-performance", "hr": "High-performance" }, "custom": { "en": "Enterprise-grade", "hr": "Enterprise-grade" } },
+          { "name": { "en": "Strategy & analytics", "hr": "Strategy & analytics" }, "start": { "en": "–", "hr": "–" }, "grow": { "en": "Monthly insights", "hr": "Monthly insights" }, "scale": { "en": "Full strategy + analytics", "hr": "Full strategy + analytics" }, "custom": { "en": "Leadership-level", "hr": "Leadership-level" } },
+          { "name": { "en": "Best for", "hr": "Best for" }, "start": { "en": "Fixing basics", "hr": "Fixing basics" }, "grow": { "en": "Building consistency", "hr": "Building consistency" }, "scale": { "en": "Scaling fast", "hr": "Scaling fast" }, "custom": { "en": "Complex organisations", "hr": "Complex organisations" } }
+        ]
+      }
+    },
+    {
+      "id": "wwd-cta-001",
+      "type": "cta-sub-page",
+      "layout": "centered",
+      "adminTitle": "Bottom CTA Banner",
+      "props": {
+        "headline": { "en": "Ready to build your own\ncreative system?", "hr": "Jeste li spremni izgraditi vlastiti\nkreativni sustav?" },
+        "subtext": { "en": "Let's make your brand clear, consistent and impossible to ignore.", "hr": "Učinimo vaš brend jasnim, dosljednim i nemogućim za ignoriranje." }
+      }
+    }
+  ]
+}

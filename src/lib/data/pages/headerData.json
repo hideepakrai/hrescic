@@ -1,0 +1,34 @@
+{
+  "logo": {
+    "type": "image",
+    "src": "/assets/Image/hrescic-logo.svg",
+    "alt": "Hrescic logo",
+    "width": "auto",
+    "height": "32px"
+  },
+  "navigation": [
+   
+    { "label": { "en": "What We Do", "hr": "Što Radimo" }, "href": "/what-we-do", "children": [
+      { "label": { "en": "Branding & Strategy", "hr": "Branding i Strategija" }, "href": "/what-we-do/branding-strategy" },
+      { "label": { "en": "Web & Digital", "hr": "Web i Digital" }, "href": "/what-we-do/web-digital" },
+      { "label": { "en": "Content & Marketing", "hr": "Sadržaj i Marketing" }, "href": "/what-we-do/content-marketing" },
+      { "label": { "en": "AI Video Production", "hr": "AI Video Produkcija" }, "href": "/what-we-do/ai-video-production" }
+    ] },
+    { "label": { "en": "Who We Create For", "hr": "Za Koga Stvaramo" }, "href": "/who-we-create-for", "children": [
+      { "label": { "en": "Tourism & Travel", "hr": "Turizam i Putovanja" }, "href": "/who-we-create-for/tourism-travel" },
+      { "label": { "en": "Learning & Development", "hr": "Obrazovanje i Razvoj" }, "href": "/who-we-create-for/education-e-learning" },
+      { "label": { "en": "Health, Pharma & Beauty", "hr": "Zdravstvo, Farmacija i Ljepota" }, "href": "/who-we-create-for/health-pharma-beauty" },
+      { "label": { "en": "Local & Boutique Brands", "hr": "Lokalni i Butik Brendovi" }, "href": "/who-we-create-for/local-boutique-brands" }
+    ] },
+    { "label": { "en": "Let's Talk", "hr": "Kontakt" }, "href": "/lets-talk" }
+  ],
+  "ctaButton": {
+    "label": { "en": "Book a Free Demo", "hr": "Rezerviraj Besplatni Demo" },
+    "href": "/lets-talk#demo"
+  },
+  "style": {
+    "sticky": true,
+    "background": "#FFFFFF",
+    "borderBottom": "1px solid #E5E7EB"
+  }
+}

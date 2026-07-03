@@ -1,0 +1,108 @@
+{
+  "metaTitle": { "en": "Who We Create For | Hrescic", "hr": "Za Koga Stvaramo | Hrescic" },
+  "metaDescription": { "en": "Hrescic works with forward-thinking businesses across tourism, health, education, and local boutique brands.", "hr": "Hrescic radi s naprednim tvrtkama u turizmu, zdravstvu, obrazovanju i lokalnim butik brendovima." },
+  "sections": [
+    {
+      "id": "wcf-hero-001",
+      "type": "hero-wwcf",
+      "layout": "centered",
+      "adminTitle": "Hero",
+      "props": {
+        "heading": { "en": "Brands from different worlds — connected by one truth:", "hr": "Brendovi iz različitih svjetova — povezani jednom istinom:" },
+        "highlight": { "en": "They need marketing that outlives the campaign.", "hr": "Treba im marketing koji nadživi kampanju." },
+        "primaryButtonText": { "en": "Book a Free Demo", "hr": "Rezerviraj Besplatni Demo" },
+        "primaryButtonHref": "/lets-talk#demo",
+        "secondaryButtonText": { "en": "Ask Us Anything", "hr": "Pitajte Nas Bilo Što" },
+        "secondaryButtonHref": "/lets-talk#ask"
+      }
+    },
+    {
+      "id": "wcf-logos-001",
+      "type": "logo-cloud",
+      "layout": "centered",
+      "adminTitle": "Trusted By Logos",
+      "props": {
+        "sectionTitle": { "en": "Trusted by Industry Professionals From:", "hr": "Vjeruju nam stručnjaci iz:" },
+        "logos": [
+          { "src": "/assets/logo/HBS-styleguide-primary-logo-3-1024x507 1.svg", "alt": "Harvard Business School" },
+          { "src": "/assets/logo/hult-logo.svg", "alt": "Hult International Business School" },
+          { "src": "/assets/logo/HBS-logo-greyscale 1.svg", "alt": "Henley Business School" },
+          { "src": "/assets/logo/logo-2.svg", "alt": "London Business School" },
+          { "src": "/assets/logo/logo-4.svg", "alt": "Principles Ray Dalio" },
+          { "src": "/assets/logo/hogan-logo 1.svg", "alt": "Hogan" },
+          { "src": "/assets/logo/Link → Početna.svg", "alt": "Profil Klett" },
+          { "src": "/assets/logo/Logo-5.svg", "alt": "Coaching.com" },
+          { "src": "/assets/logo/tis-main-logo 2.svg", "alt": "TIS Grupa" },
+          { "src": "/assets/logo/Layer_1.svg", "alt": "Pliva Teva" },
+          { "src": "/assets/logo/Isolation_Mode.svg", "alt": "Novartis" },
+          { "src": "/assets/logo/kroati-logo.svg", "alt": "Kroati" },
+          { "src": "/assets/logo/logo10.svg", "alt": "Profil Klett" }
+        ]
+      }
+    },
+    {
+      "id": "wcf-industries-001",
+      "type": "industry-detail-cards",
+      "layout": "2x2-feature",
+      "adminTitle": "Industry Details",
+      "props": {
+        "sectionTitle": { "en": "We work with brands across tourism, education, health & beauty and boutique industries.", "hr": "Radimo s brendovima u turizmu, obrazovanju, zdravstvu i butik industrijama." },
+        "sectionSubtext": { "en": "Different worlds — same challenge: staying relevant, consistent and unmistakably clear. Our creative system helps them attract the right clients, increase bookings and build long-term trust.", "hr": "Različiti svjetovi — isti izazov: ostati relevantan, dosljedan i nepogrešivo jasan. Naš kreativni sustav pomaže im privući prave klijente, povećati rezervacije i izgraditi dugoročno povjerenje." },
+        "industries": [
+          {
+            "slug": "tourism-travel",
+            "image": "/assets/Image/tourism-hero.png",
+            "title": { "en": "Tourism & Travel", "hr": "Turizam i Putovanja" },
+            "pain": { "en": "The pain:", "hr": "Problem:" },
+            "painQuestion": { "en": "People browse, compare your offer with 40 similar listings, and leave without booking.", "hr": "Ljudi pregledavaju, uspoređuju vašu ponudu s 40 sličnih i odlaze bez rezervacije." },
+            "painReason": { "en": "Why it happens:", "hr": "Zašto se događa:" },
+            "need": { "en": "Your digital experience feels 'nice', but it doesn't clearly show why you're the better choice.", "hr": "Vaše digitalno iskustvo djeluje 'lijepo', ali ne pokazuje jasno zašto ste bolji izbor." },
+            "needText": { "en": "What you need: A booking-focused brand and website that make the value obvious — instantly.", "hr": "Što vam treba: Brend i web usmjereni na rezervacije koji vrijednost čine očitom — odmah." },
+            "stats": { "en": "+68% bookings | 3× more inquiries | +40-70% engagement", "hr": "+68% rezervacija | 3× više upita | +40-70% angažmana" },
+            "suggestedPlan": { "en": "Grow + Scale", "hr": "Rast + Skaliranje" },
+            "href": "/who-we-create-for/tourism-travel"
+          },
+          {
+            "slug": "education-e-learning",
+            "image": "/assets/Image/education-imgs.png",
+            "title": { "en": "Education & E-Learning", "hr": "Obrazovanje i E-Učenje" },
+            "pain": { "en": "The pain:", "hr": "Problem:" },
+            "painQuestion": { "en": "Programs, platforms and funnels evolve separately, creating fragmented experiences for learners.", "hr": "Programi, platforme i tokovi se razvijaju odvojeno, stvarajući fragmentirana iskustva za učenike." },
+            "painReason": { "en": "Why it happens:", "hr": "Zašto se događa:" },
+            "need": { "en": "Education businesses don't struggle because they lack expertise. They struggle because complexity hides value.", "hr": "Obrazovne tvrtke ne pate jer im nedostaje stručnost. Pate jer složenost skriva vrijednost." },
+            "needText": { "en": "What you need: A clear structure learners immediately understand and systems that support scale without adding confusion.", "hr": "Što vam treba: Jasna struktura koju učenici odmah razumiju i sustavi koji podržavaju skaliranje bez dodavanja zabune." },
+            "stats": { "en": "-48% registration friction | 2.5× enrolment | Scalable ecosystem", "hr": "-48% trenja pri registraciji | 2.5× upis | Skalabilni ekosustav" },
+            "suggestedPlan": { "en": "Grow + Scale", "hr": "Rast + Skaliranje" },
+            "href": "/who-we-create-for/education-e-learning"
+          },
+          {
+            "slug": "health-pharma-beauty",
+            "image": "/assets/hero/health-pharma-img.png",
+            "title": { "en": "Health, Pharma & Beauty", "hr": "Zdravstvo, Farmacija i Ljepota" },
+            "pain": { "en": "The pain:", "hr": "Problem:" },
+            "painQuestion": { "en": "Clients want to trust you — but your online presence feels outdated or inconsistent compared to others.", "hr": "Klijenti vam žele vjerovati — ali vaša online prisutnost djeluje zastarjelo ili nedosljedno u usporedbi s drugima." },
+            "painReason": { "en": "Why it happens:", "hr": "Zašto se događa:" },
+            "need": { "en": "Your expertise and warmth don't translate clearly into digital communication, creating hesitation.", "hr": "Vaša stručnost i toplina ne prenose se jasno u digitalnu komunikaciju, stvarajući oklijevanje." },
+            "needText": { "en": "What you need: A credible, empathetic and structured digital identity that builds trust before they ever walk in.", "hr": "Što vam treba: Vjerodostojan, empatičan i strukturiran digitalni identitet koji gradi povjerenje prije nego uopće uđu." },
+            "stats": { "en": "+32% returning clients | Clearer inquiries | Trust-driven design", "hr": "+32% povratnih klijenata | Jasniji upiti | Dizajn vođen povjerenjem" },
+            "suggestedPlan": { "en": "Start + Grow", "hr": "Početni + Rast" },
+            "href": "/who-we-create-for/health-pharma-beauty"
+          },
+          {
+            "slug": "local-boutique-brands",
+            "image": "/assets/Image/brands-hero-img.png",
+            "title": { "en": "Local & Boutique Brands", "hr": "Lokalni i Butik Brendovi" },
+            "pain": { "en": "The pain:", "hr": "Problem:" },
+            "painQuestion": { "en": "Your product stands out in real life — but online you blend in with dozens of similar search results.", "hr": "Vaš proizvod se ističe u stvarnom životu — ali online se stapa s desecima sličnih rezultata pretraživanja." },
+            "painReason": { "en": "Why it happens:", "hr": "Zašto se događa:" },
+            "need": { "en": "Your personality, craft and story aren't expressed in a way people remember.", "hr": "Vaša osobnost, umijeće i priča nisu izraženi na način koji ljudi pamte." },
+            "needText": { "en": "What you need: Authentic identity + storytelling that match the quality of your work and support premium pricing.", "hr": "Što vam treba: Autentičan identitet + pričanje priča koje odgovaraju kvaliteti vašeg rada i podržavaju premium cijene." },
+            "stats": { "en": "45% conversion improvement | Instant traction | Premium perception", "hr": "45% poboljšanje konverzije | Trenutna privlačnost | Premium percepcija" },
+            "suggestedPlan": { "en": "Start + Grow", "hr": "Početni + Rast" },
+            "href": "/who-we-create-for/local-boutique-brands"
+          }
+        ]
+      }
+    }
+  ]
+}
