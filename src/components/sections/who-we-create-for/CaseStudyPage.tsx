@@ -1,7 +1,22 @@
 "use client";
-import { useState } from "react";
 
+import { useState, useMemo, createContext, useContext } from "react";
 import { getIconSvg } from "./icons/CaseStudyIcons";
+import { useAppSelector } from "@/lib/store/hooks";
+import { usePathname } from "next/navigation";
+import { SUPPORTED_LOCALES } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { useEditable } from "@/lib/store/pages/useEditable";
+import EditableText from "@/components/shared/EditableText";
+
+export const CaseStudyContext = createContext<{
+  isEditable: boolean;
+  et: (path: string, defaultValue: string, isMultiline?: boolean, tag?: "span" | "div" | "p") => any;
+  val: (localizableField: any) => string;
+  reduxProps: any;
+  locale: string;
+  handleChange: any;
+} | null>(null);
 
 interface CaseStudyData {
   type?: string;
@@ -138,41 +153,98 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
     }
   };
 
-  if (data.type === "cdc") {
-    return <CDCCaseStudyPage data={data} handleScroll={handleScroll} />;
-  }
+  const pathname = usePathname();
+  const locale = useLocale();
+  const currentPages = useAppSelector((state) => state.pages.currentPages);
 
-  if (data.type === "expo") {
-    return <ExpoCaseStudyPage data={data} />;
-  }
+  const slug = useMemo(() => {
+    if (!pathname) return "home";
+    const segments = pathname.split('/').filter(Boolean);
+    const hasLocalePrefix = SUPPORTED_LOCALES.includes(segments[0] as any);
+    const pathSegments = hasLocalePrefix ? segments.slice(1) : segments;
+    return pathSegments.join('/') || "home";
+  }, [pathname]);
 
-  if (data.type === "loreal") {
-    return <LorealCaseStudyPage data={data} />;
-  }
+  const blockId = currentPages?.content?.[0]?.id;
+  const { isEditable, handleChange } = useEditable(blockId || "");
 
-  if (data.type === "poliderma") {
-    return <PolidermaPage data={data} />;
-  }
+  // Read raw localizable props from Redux if slug matches
+  const reduxProps = useMemo(() => {
+    if (currentPages && (currentPages.slug === slug || currentPages.slug?.replace(/\/sub\//g, '/') === slug)) {
+      const content = Array.isArray(currentPages.content) ? currentPages.content[0] : null;
+      return content?.props;
+    }
+    return null;
+  }, [currentPages, slug]);
 
-  if (data.type === "castania") {
-    return <CastaniaPage data={data} />;
-  }
+  const val = (localizableField: any) => {
+    if (localizableField && typeof localizableField === "object") {
+      return localizableField[locale] || localizableField["en"] || "";
+    }
+    return localizableField || "";
+  };
 
-  if (data.type === "navada") {
-    return <NavadaPage data={data} />;
-  }
+  const getNestedField = (obj: any, path: string) => {
+    const parts = path.split(".");
+    let current = obj;
+    for (const part of parts) {
+      if (current == null) return undefined;
+      current = current[part];
+    }
+    return current;
+  };
 
-  if (data.type === "minglanje-v-klanjcu") {
-    return <MinglanjeVKlanjcuPage data={data} />;
-  }
+  const et = (path: string, defaultValue: string, isMultiline = false, tag: "span" | "div" | "p" = "span") => {
+    if (isEditable) {
+      return (
+        <EditableText
+          text={reduxProps ? val(getNestedField(reduxProps, path)) : defaultValue}
+          editable={true}
+          onChange={handleChange(`props.${path}.${locale}`)}
+          tag={tag}
+          multiline={isMultiline}
+        />
+      );
+    }
+    return defaultValue;
+  };
 
-  if (data.type === "ids") {
-    return <IdsPage data={data} />;
-  }
+  const renderContent = () => {
+    if (data.type === "cdc") {
+      return <CDCCaseStudyPage data={data} handleScroll={handleScroll} />;
+    }
 
-  const { hero, stats, intro, challenge, results, role, partnership, cta } = data;
+    if (data.type === "expo") {
+      return <ExpoCaseStudyPage data={data} />;
+    }
 
-  const isRichLayout = !!intro;
+    if (data.type === "loreal") {
+      return <LorealCaseStudyPage data={data} />;
+    }
+
+    if (data.type === "poliderma") {
+      return <PolidermaPage data={data} />;
+    }
+
+    if (data.type === "castania") {
+      return <CastaniaPage data={data} />;
+    }
+
+    if (data.type === "navada") {
+      return <NavadaPage data={data} />;
+    }
+
+    if (data.type === "minglanje-v-klanjcu") {
+      return <MinglanjeVKlanjcuPage data={data} />;
+    }
+
+    if (data.type === "ids") {
+      return <IdsPage data={data} />;
+    }
+
+    const { hero, stats, intro, challenge, results, role, partnership, cta } = data;
+
+    const isRichLayout = !!intro;
 
   return (
     <div className="w-full bg-white overflow-x-hidden">
@@ -183,20 +255,20 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
             <div className="grid lg:grid-cols-[1fr_1fr]">
               <div className="flex min-h-[360px] flex-col px-5 py-5 sm:px-8 sm:py-7 lg:min-h-[500px] lg:px-16 lg:py-6">
                 <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#7d7772]">
-                  <span className="text-[22px] font-semibold text-[#fff]">{hero.breadcrumbLabel}</span>
+                  <span className="text-[22px] font-semibold text-[#fff]">{et("hero.breadcrumbLabel", hero.breadcrumbLabel)}</span>
                   <span className="h-3 w-px bg-[#bcb5af]"></span>
-                  <span className="text-[14px] text-[#fff] italic">{hero.breadcrumbSub}</span>
+                  <span className="text-[14px] text-[#fff] italic">{et("hero.breadcrumbSub", hero.breadcrumbSub)}</span>
                 </div>
                 <div className="my-auto pt-10 sm:pt-20 lg:pl-0">
                   <h1 className="hero-title text-[30px] sm:text-[38px] md:text-[40px] lg:text-[38px] font-normal leading-[1.08] tracking-normal text-white">
                     {hero.headingHighlight && (
-                      <span className="text-[#49E000] block sm:inline sm:pe-2">{hero.headingHighlight}</span>
+                      <span className="text-[#49E000] block sm:inline sm:pe-2">{et("hero.headingHighlight", hero.headingHighlight)}</span>
                     )}
                     {hero.headingHighlight && <br />}
-                    {hero.heading}
+                    {et("hero.heading", hero.heading)}
                   </h1>
                   <p className="mt-6 text-[15px] sm:text-[16px] leading-[1.7] text-white font-light">
-                    {hero.subtext}
+                    {et("hero.subtext", hero.subtext, true)}
                   </p>
                   
                   {hero.tabs && (
@@ -208,7 +280,7 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                           onClick={() => handleScroll(tab.target)}
                           className="w-fit rounded-full bg-[#49E000] px-5 sm:px-6 py-[12px] sm:py-[13px] text-[13px] sm:text-[15px] font-medium leading-none text-[#003C42] transition duration-300 hover:translate-y-[-1px] hover:shadow-[0_10px_24px_rgba(73,224,0,0.22)]"
                         >
-                          {tab.label}
+                          {et("hero.tabs." + i + ".label", tab.label)}
                         </button>
                       ))}
                     </div>
@@ -217,7 +289,7 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
               </div>
               <div className="relative min-h-[280px] lg:min-h-[500px]">
                 <div className="relative h-[300px] sm:h-[420px] md:h-[520px] lg:h-full lg:min-h-[488px]">
-                  <img src={hero.image} alt={hero.heading} className="h-full w-full object-cover object-center" />
+                  <img src={hero.image} alt="" className="h-full w-full object-cover object-center" />
                   <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,60,66,0.08)_0%,rgba(0,60,66,0)_24%,rgba(0,0,0,0.03)_100%)]"></div>
                   <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8">
                     <a href="/who-we-create-for/myrent">
@@ -244,8 +316,8 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                   {stats.map((stat, i) => (
                     <div key={i} className="relative px-4 sm:px-6 lg:ps-8 lg:pe-0">
                       <div className="lg:min-h-[112px]">
-                        <h3 className="text-[42px] sm:text-[48px] lg:text-[50px] font-normal leading-[0.95] text-[#32B100]">{stat.value}</h3>
-                        <p className="mt-3 max-w-[210px] text-[14px] sm:text-[14px] leading-[1.45] text-[#5B5B5B]">{stat.label}</p>
+                        <h3 className="text-[42px] sm:text-[48px] lg:text-[50px] font-normal leading-[0.95] text-[#32B100]">{et("stats." + i + ".value", stat.value)}</h3>
+                        <p className="mt-3 max-w-[210px] text-[14px] sm:text-[14px] leading-[1.45] text-[#5B5B5B]">{et("stats." + i + ".label", stat.label)}</p>
                       </div>
                       {i < stats.length - 1 && (
                         <div className="hidden lg:block absolute right-0 top-1/2 h-[64px] w-px -translate-y-1/2 bg-[#D4D4D0]"></div>
@@ -267,10 +339,10 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                 <div className="px-4 py-10 sm:px-8 sm:py-12 md:px-10 lg:px-[120px] lg:py-[68px]">
                   <div className="mx-auto text-center md:max-w-[84%]">
                     <h2 className="text-[26px] sm:text-[31px] md:text-[38px] lg:text-[40px] font-normal leading-[1.2] tracking-[-0.02em] text-[#00353A]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                      {intro.heading}
+                      {et("intro.heading", intro.heading)}
                     </h2>
                     <p className="mx-auto mt-6 text-[14px] sm:text-[18px] leading-[1.55] text-[#555555]">
-                      {intro.text}
+                      {et("intro.text", intro.text, true)}
                     </p>
                   </div>
                 </div>
@@ -285,9 +357,9 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                 <div className="overflow-hidden rounded-[14px] bg-[#F8F8F8]">
                   <div className="grid border-b border-[#e2dbd7] bg-[#00646E] lg:grid-cols-[1.02fr_0.98fr]">
                     <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:ps-[86px] lg:pe-[24px] lg:pb-[56px] lg:pt-[34px]">
-                      <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#05C4D9]">{challenge.heading}</h3>
+                      <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#05C4D9]">{et("challenge.heading", challenge.heading)}</h3>
                       <p className="mt-8 sm:mt-10 md:mt-14 lg:mt-[72px] text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.35] tracking-[-0.015em] text-[#fff]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                        {challenge.text}
+                        {et("challenge.text", challenge.text, true)}
                       </p>
                     </div>
                     <div className="flex items-center justify-center px-5 py-7 sm:px-8 sm:py-8 md:px-10 lg:px-[46px]">
@@ -296,20 +368,20 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                   </div>
                   <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:px-[86px] lg:pb-[50px] lg:pt-[60px]">
                     <h3 className="text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.3] tracking-[-0.015em] text-[#00353A]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                      {challenge.listHeading}
+                      {et("challenge.listHeading", challenge.listHeading)}
                     </h3>
                     <div className="mt-6 sm:mt-7 space-y-[14px]">
                       {challenge.listItems.map((item, i) => (
                         <div key={i} className="flex items-start gap-3">
                           <span className="mt-[3px] flex h-[21px] w-[21px] min-w-[21px] items-center justify-center rounded-full bg-[#05C4D9] text-[14px] font-bold leading-none text-white">!</span>
-                          <p className="text-[14px] sm:text-[15px] leading-[1.5] text-[#555555]">{item}</p>
+                          <p className="text-[14px] sm:text-[15px] leading-[1.5] text-[#555555]">{et("challenge.listItems." + i, item)}</p>
                         </div>
                       ))}
                     </div>
                     <div className="mt-9 sm:mt-12 lg:mt-[48px] flex items-start gap-3 sm:gap-4">
                       <span className="flex h-[33px] w-[35px] min-w-[30px] items-center justify-center rounded-[6px] bg-[#ECECEC] text-[20px] font-semibold leading-none text-[#05C4D9]">!</span>
                       <p className="text-[20px] sm:text-[22px] font-normal leading-[1.35] tracking-[-0.015em] text-[#00353A]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                        {challenge.quoteText}
+                        {et("challenge.quoteText", challenge.quoteText, true)}
                       </p>
                     </div>
                   </div>
@@ -324,19 +396,19 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
               <div className="mx-auto container-xl">
                 <div className="text-center">
                   <h2 className="text-[26px] sm:text-[31px] md:text-[36px] lg:text-[40px] font-normal leading-[1.18] tracking-[-0.02em] text-[#00353A]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                    {results.heading}
+                    {et("results.heading", results.heading)}
                   </h2>
-                  <p className="mt-2 text-[15px] sm:text-[22px] font-semibold text-[#00353A]">{results.subheading}</p>
+                  <p className="mt-2 text-[15px] sm:text-[22px] font-semibold text-[#00353A]">{et("results.subheading", results.subheading)}</p>
                 </div>
                 <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                   {results.cards.map((card, i) => (
                     <div key={i} className="overflow-hidden rounded-[16px] bg-[#003C42] h-full">
                       <div className="h-[210px] sm:h-[220px] w-full overflow-hidden">
-                        <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+                        <img src={card.image} alt="" className="h-full w-full object-cover" />
                       </div>
                       <div className="px-4 sm:px-[24px] pb-5 sm:pb-[20px] pt-4 sm:pt-[16px]">
-                        <h3 className="border-b border-[#1E6A70] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#fff]">{card.title}</h3>
-                        <p className="pt-4 text-[14px] sm:text-[14px] leading-[1.7] text-[#fff]">{card.text}</p>
+                        <h3 className="border-b border-[#1E6A70] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#fff]">{et("results.cards." + i + ".title", card.title)}</h3>
+                        <p className="pt-4 text-[14px] sm:text-[14px] leading-[1.7] text-[#fff]">{et("results.cards." + i + ".text", card.text, true)}</p>
                         <div className="mt-4 space-y-3">
                           {card.bullets.map((bullet, j) => (
                             <div key={j} className="flex items-start gap-2.5">
@@ -346,7 +418,7 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                                   <path d="M11 7L14 10L11 13" stroke="#003C42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
                               </span>
-                              <p className="text-[13px] sm:text-[14px] leading-[1.55] text-white">{bullet}</p>
+                              <p className="text-[13px] sm:text-[14px] leading-[1.55] text-white">{et("results.cards." + i + ".bullets." + j, bullet)}</p>
                             </div>
                           ))}
                         </div>
@@ -363,9 +435,9 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
             <section id="role" className="w-full px-3 pb-6 pt-0 sm:px-5 sm:pb-8 lg:py-14">
               <div className="mx-auto md:max-w-[70%] lg:max-w-[70%] max-w-[90%]">
                 <div className="mx-auto text-left">
-                  <h3 className="text-[16px] sm:text-[22px] font-semibold text-[#003C42]">{role.heading}</h3>
+                  <h3 className="text-[16px] sm:text-[22px] font-semibold text-[#003C42]">{et("role.heading", role.heading)}</h3>
                   <p className="mt-3 text-[22px] sm:text-[26px] md:text-[26px] font-normal leading-[1.33] tracking-[-0.015em] text-[#555555]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                    {role.text}
+                    {et("role.text", role.text, true)}
                   </p>
                 </div>
                 <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -374,8 +446,8 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                       <div className="flex h-[58px] w-[58px] items-center justify-center rounded-[14px] bg-[#D9D9D9]">
                         {getIconSvg(card.icon)}
                       </div>
-                      <h4 className="mt-5 text-[18px] sm:text-[19px] font-semibold text-[#003C42]">{card.title}</h4>
-                      <p className="mt-3 max-w-[210px] text-[14px] sm:text-[15px] leading-[1.6] text-[#666666]">{card.text}</p>
+                      <h4 className="mt-5 text-[18px] sm:text-[19px] font-semibold text-[#003C42]">{et("results.cards." + i + ".title", card.title)}</h4>
+                      <p className="mt-3 max-w-[210px] text-[14px] sm:text-[15px] leading-[1.6] text-[#666666]">{et("results.cards." + i + ".text", card.text, true)}</p>
                     </div>
                   ))}
                 </div>
@@ -399,10 +471,10 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
               <div className="mx-auto container-xl">
                 <div className="mx-auto max-w-[760px] text-center">
                   <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-normal leading-[1.15] tracking-[-0.02em] text-[#003C42]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                    {partnership.heading}
+                    {et("partnership.heading", partnership.heading)}
                   </h2>
                   <p className="mx-auto mt-4 max-w-[720px] text-[15px] sm:text-[16px] leading-[1.75] text-[#666666]">
-                    {partnership.text}
+                    {et("partnership.text", partnership.text, true)}
                   </p>
                 </div>
                 <div className="mx-auto mt-8 container-xl rounded-[20px] bg-[#004B53] px-5 py-7 sm:px-8 sm:py-9 lg:mt-10 lg:px-10 lg:py-10">
@@ -410,8 +482,8 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
                     {stats.map((stat, i) => (
                       <div key={i} className="relative px-3 lg:px-10">
                         <div className="min-h-[104px]">
-                          <h3 className="text-[42px] sm:text-[48px] lg:text-[54px] font-normal leading-[0.95] text-[#49E000]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>{stat.value}</h3>
-                          <p className="mt-3 md:max-w-[200px] lg:max-w-[200px] text-[13px] sm:text-[14px] leading-[1.45] text-white/90">{stat.label}</p>
+                          <h3 className="text-[42px] sm:text-[48px] lg:text-[54px] font-normal leading-[0.95] text-[#49E000]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>{et("stats." + i + ".value", stat.value)}</h3>
+                          <p className="mt-3 md:max-w-[200px] lg:max-w-[200px] text-[13px] sm:text-[14px] leading-[1.45] text-white/90">{et("stats." + i + ".label", stat.label)}</p>
                         </div>
                         {i < stats.length - 1 && (
                           <div className="hidden lg:block absolute right-0 top-1/2 h-[62px] w-px -translate-y-1/2 bg-[#0F6972]"></div>
@@ -432,8 +504,8 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 py-10">
                 {stats.map((stat, i) => (
                   <div key={i} className="text-center">
-                    <p className="text-3xl sm:text-4xl font-bold text-[#37C100]">{stat.value}</p>
-                    <p className="text-sm text-[#555] mt-2">{stat.label}</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-[#37C100]">{et("stats." + i + ".value", stat.value)}</p>
+                    <p className="text-sm text-[#555] mt-2">{et("stats." + i + ".label", stat.label)}</p>
                   </div>
                 ))}
               </div>
@@ -456,7 +528,7 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
             <div className="mt-7 flex w-full max-w-[420px] flex-col items-center gap-3">
               {cta ? (
                 <a href={cta.button1Href} className="w-full sm:w-fit">
-                  <button className="btn-primary w-full">{cta.button1Text}</button>
+                  <button className="btn-primary w-full">{et("cta.button1Text", cta.button1Text)}</button>
                 </a>
               ) : (
                 <>
@@ -474,9 +546,18 @@ export default function CaseStudyPage({ data }: { data: CaseStudyData }) {
       </section>
     </div>
   );
+};
+
+return (
+  <CaseStudyContext.Provider value={{ isEditable, et, val, reduxProps, locale, handleChange }}>
+    {renderContent()}
+  </CaseStudyContext.Provider>
+);
 }
 
 function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleScroll: (target: string) => void }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const theme = data.theme || {};
   const hero = data.hero;
 
@@ -490,9 +571,9 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
               <div className="w-full px-4 pb-7 sm:px-6 sm:pb-9 md:px-8 md:pb-10 lg:px-[58px] lg:pb-[54px] pt-7">
                 <div className="mb-8 flex flex-wrap items-center justify-between gap-4 sm:mb-10 lg:mb-14">
                   <div className="flex flex-wrap items-center gap-2 text-[13px] text-[#1B1642]">
-                    <span className="text-[13px] font-semibold text-[#16123F] sm:text-[14px] md:text-[22px]">{hero.breadcrumbLabel}</span>
+                    <span className="text-[13px] font-semibold text-[#16123F] sm:text-[14px] md:text-[22px]">{et("hero.breadcrumbLabel", hero.breadcrumbLabel)}</span>
                     <span className="text-[#8F8A96]">|</span>
-                    <span className="text-[12px] italic text-[#16123F] sm:text-[14px]">{hero.breadcrumbSub}</span>
+                    <span className="text-[12px] italic text-[#16123F] sm:text-[14px]">{et("hero.breadcrumbSub", hero.breadcrumbSub)}</span>
                   </div>
                   <a href="/who-we-create-for">
                     <button type="button" className="rounded-full border border-[#E4D6DE] bg-transparent px-4 py-2 text-[11px] font-medium text-[#8F7F87] transition-all duration-300 hover:bg-white/60 sm:text-[12px]">Back to Portfolio</button>
@@ -513,16 +594,16 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text"
                     }}>
-                  {hero.heading}
+                  {et("hero.heading", hero.heading)}
                 </h1>
                 <p className="mt-5 max-w-[430px] text-[14px] leading-[1.75] text-[#3D3A55] sm:mt-6 sm:text-[15px] md:text-[16px]">
-                  {hero.subtext}
+                  {et("hero.subtext", hero.subtext, true)}
                 </p>
                 {hero.tabs && (
                   <div className="mt-8 flex max-w-[560px] flex-wrap gap-2 sm:mt-9 sm:gap-3">
                     {hero.tabs.map((tab: any, i: number) => (
                       <button key={i} type="button" onClick={() => handleScroll(tab.target)} className="w-fit rounded-full bg-[#5E1DE1] px-4 py-[11px] text-center text-[12px] font-medium leading-none text-white transition duration-300 hover:-translate-y-[1px] hover:bg-[#4e16bd] hover:shadow-[0_12px_24px_rgba(94,29,225,0.22)] sm:px-5 sm:py-[12px] sm:text-[13px] md:px-6 md:py-[13px] md:text-[14px] lg:text-[15px]">
-                        {tab.label}
+                        {et("hero.tabs." + i + ".label", tab.label)}
                       </button>
                     ))}
                   </div>
@@ -531,7 +612,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
             </div>
             <div className="order-1 lg:order-2">
               <div className="relative h-[240px] sm:h-[320px] md:h-[420px] lg:h-full lg:min-h-[560px]">
-                <img src={hero.image} alt={hero.heading} className="h-full w-full object-cover object-center"/>
+                <img src={hero.image} alt="" className="h-full w-full object-cover object-center"/>
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_22%,rgba(255,255,255,0)_100%)]"></div>
               </div>
             </div>
@@ -572,13 +653,13 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
               <div className="mt-10 grid gap-y-8 sm:mt-[50px] md:mt-[60px] lg:grid-cols-[1fr_1fr] lg:gap-x-[50px] xl:gap-x-[60px]">
                 <div>
                   <p className="mt-4 text-[20px] font-normal leading-[1.3] tracking-[-0.015em] text-[#0F0F3D] sm:mt-5 sm:text-[24px] md:text-[25px] lg:text-[26px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                    {data.appreciation.heading}
+                    {et("appreciation.heading", data.appreciation.heading)}
                   </p>
                 </div>
                 <div className="max-w-[520px]">
                   <div className="mt-2 space-y-[14px] sm:mt-5">
-                    <p className="text-[14px] leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">{data.appreciation.text1}</p>
-                    <p className="text-[14px] leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">{data.appreciation.text2}</p>
+                    <p className="text-[14px] leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">{et("appreciation.text1", data.appreciation.text1, true)}</p>
+                    <p className="text-[14px] leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">{et("appreciation.text2", data.appreciation.text2, true)}</p>
                   </div>
                 </div>
               </div>
@@ -594,9 +675,9 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
             <div className="overflow-hidden rounded-[14px] bg-[#EBE1F7]">
               <div className="grid border-b border-[#e2dbd7] bg-[#F7F0FF] lg:grid-cols-[1.02fr_0.98fr]">
                 <div className="px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:pb-[56px] lg:pe-[24px] lg:ps-[86px] lg:pt-[34px]">
-                  <h3 className="text-[20px] font-normal text-[#0F0F3D] sm:text-[22px] md:text-[24px] lg:text-[26px]">{data.challenge.heading}</h3>
+                  <h3 className="text-[20px] font-normal text-[#0F0F3D] sm:text-[22px] md:text-[24px] lg:text-[26px]">{et("challenge.heading", data.challenge.heading)}</h3>
                   <p className="mt-6 text-[20px] font-normal leading-[1.35] tracking-[-0.015em] text-[#0F0F3D] sm:mt-8 sm:text-[22px] md:mt-10 md:text-[24px] lg:mt-[14px] lg:text-[26px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                    {data.challenge.text}
+                    {et("challenge.text", data.challenge.text, true)}
                   </p>
                 </div>
                 <div className="flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-8 lg:px-[46px]">
@@ -605,7 +686,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
               </div>
               <div className="px-4 py-8 sm:px-6 sm:py-10 md:px-8 lg:px-[86px] lg:pb-[50px] lg:pt-[60px]">
                 <h3 className="max-w-[680px] text-[20px] font-normal leading-[1.3] tracking-[-0.015em] text-[#0F0F3D] sm:text-[22px] md:text-[24px] lg:text-[26px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                  {data.challenge.listHeading}
+                  {et("challenge.listHeading", data.challenge.listHeading)}
                 </h3>
                 <h3 className="mt-7 text-[20px] font-normal leading-[1.3] tracking-[-0.015em] text-[#0F0F3D] sm:mt-8 sm:text-[22px] md:text-[24px] lg:text-[26px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
                   This included:
@@ -620,7 +701,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
                         </svg>
                       </span>
                       <p className="text-[14px] leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">
-                        {item}
+                        {et("challenge.listItems." + i, item)}
                       </p>
                     </div>
                   ))}
@@ -637,10 +718,10 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
           <div className="mx-auto container-xl">
             <div className="text-center">
               <h2 className="text-[24px] font-normal leading-[1.18] tracking-[-0.02em] text-[#0F0F3D] sm:text-[30px] md:text-[34px] lg:text-[40px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                {data.resultsIntro.heading}
+                {et("resultsIntro.heading", data.resultsIntro.heading)}
               </h2>
               <p className="mt-2 px-2 text-[14px] font-normal leading-[1.7] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">
-                {data.resultsIntro.subheading}
+                {et("resultsIntro.subheading", data.resultsIntro.subheading)}
               </p>
             </div>
           </div>
@@ -655,15 +736,15 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
               <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-[6px] bg-[#F9F3F3] text-[24px] font-bold text-[#6B28F0]">1</span>
                 <h3 className="text-[20px] font-normal tracking-[-0.02em] text-[#1A173F] sm:text-[24px] md:text-[26px]">
-                  {data.platform.heading}
+                  {et("platform.heading", data.platform.heading)}
                 </h3>
               </div>
               <div className="mt-8 grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:gap-x-12">
                 <p className="text-[22px] leading-[1.28] tracking-[-0.02em] text-[#0F0F3D] sm:text-[24px] md:text-[26px] lg:text-[28px]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                  {data.platform.text1}
+                  {et("platform.text1", data.platform.text1, true)}
                 </p>
                 <p className="pt-1 text-[14px] leading-[1.8] text-[#0F0F3D] sm:text-[15px] md:text-[16px]">
-                  {data.platform.text2}
+                  {et("platform.text2", data.platform.text2, true)}
                 </p>
               </div>
               <div className="mt-10 grid gap-4 sm:gap-5 lg:grid-cols-12">
@@ -683,7 +764,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
               {/* NAVIGATION FLOWCHART CARD */}
               <div className="mt-8 overflow-hidden rounded-[24px] bg-[#F4EFF1]">
                 <div className="px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-5 lg:px-8 lg:pb-12">
-                  <p className="text-[11px] italic text-[#C8B9BE]">{data.platform.navigation.title}</p>
+                  <p className="text-[11px] italic text-[#C8B9BE]">{et("platform.navigation.title", data.platform.navigation.title)}</p>
                   <div className="relative mt-6">
                     <div className="flex justify-center">
                       <span className="relative z-[2] rounded-full bg-[#D9CCFF] px-5 py-[8px] text-[14px] font-semibold leading-none text-[#5F29E6] shadow-[0_1px_0_rgba(255,255,255,0.55)] sm:text-[15px] md:text-[16px]">Navigation</span>
@@ -700,7 +781,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
                       <div key={cIdx} className="relative">
                         <div className="mb-8 flex justify-center sm:mb-9 lg:mb-11">
                           <span className="rounded-full bg-[#E8E0E4] px-[20px] py-[8px] text-[14px] font-semibold leading-none text-[#6B28F0] sm:px-[22px] sm:text-[15px] md:text-[16px]">
-                            {col.title}
+                            {et("platform.navigation.columns." + cIdx + ".title", col.title)}
                           </span>
                         </div>
                         <div className="space-y-5 sm:space-y-6 lg:space-y-7">
@@ -709,7 +790,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
                               <span className="flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-[7px] bg-[#EEE7E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
                                 <img src={`/assets/Image/${item.icon}`} alt="" className="h-4 w-4 object-contain"/>
                               </span>
-                              <span className="min-w-0 text-[13px] leading-[1.35] text-[#838181] sm:text-[14px]">{item.label}</span>
+                              <span className="min-w-0 text-[13px] leading-[1.35] text-[#838181] sm:text-[14px]">{et("platform.navigation.columns." + cIdx + ".items." + iIdx + ".label", item.label)}</span>
                             </div>
                           ))}
                         </div>
@@ -723,7 +804,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
                   <div className="flex justify-center py-8 sm:py-10 md:py-12">
                     <a href={data.platform.navigation.ctaHref}>
                       <button type="button" className="rounded-full bg-[#5E1DE1] px-5 py-[13px] text-[12px] font-medium leading-none text-white transition duration-300 hover:bg-[#4e16bd] hover:shadow-[0_14px_28px_rgba(94,29,225,0.22)] sm:px-7 sm:text-[13px] md:px-8 md:py-[14px] md:text-[14px]">
-                        {data.platform.navigation.ctaText}
+                        {et("platform.navigation.ctaText", data.platform.navigation.ctaText)}
                       </button>
                     </a>
                   </div>
@@ -740,7 +821,7 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
         <section className="w-full px-3 pb-6 sm:px-5 lg:pb-8">
           <div className="mx-auto container-xl">
             <div className="rounded-[28px] bg-[#FBF6F7] p-4 sm:p-6 lg:p-8">
-              <p className="text-[12px] italic text-[#C4B6BC]">{data.grid.title}</p>
+              <p className="text-[12px] italic text-[#C4B6BC]">{et("grid.title", data.grid.title)}</p>
               <div className="mt-5 overflow-hidden rounded-[26px] bg-[#F6EFF0] px-4 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
                 <div className="mx-auto max-w-[1254px]">
                   <div className="relative">
@@ -838,6 +919,9 @@ function CDCCaseStudyPage({ data, handleScroll }: { data: CaseStudyData; handleS
 }
 
 function ExpoCaseStudyPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
+  const isEditable = ctx?.isEditable || false;
   const { breadcrumb, breadcrumbSub, heading, image, video } = data;
   const [isPlaying, setIsPlaying] = useState(false);
   return (
@@ -899,6 +983,8 @@ function ExpoCaseStudyPage({ data }: { data: CaseStudyData }) {
 }
 
 function LorealCaseStudyPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const { breadcrumb, breadcrumbSub, heading, image, video } = data;
   const [isPlaying, setIsPlaying] = useState(false);
   return (
@@ -997,6 +1083,8 @@ function ArrowIcon() {
 }
 
 function PolidermaPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const hero = data.hero as any;
   const challenge = data.challenge as any;
   const approach = data.approach as any;
@@ -1032,7 +1120,7 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
                     {(hero.tabs as any[]).map((tab: any, i: number) => (
                       <a key={i} href={tab.target}>
                         <button type="button" className="w-fit rounded-full bg-[#DD9842] px-4 py-[11px] text-center text-[12px] font-medium leading-none text-white transition duration-300 hover:-translate-y-[1px] hover:bg-[#c88030] hover:shadow-[0_12px_24px_rgba(221,152,66,0.22)] sm:px-5 sm:py-[12px] sm:text-[13px] md:px-6 md:py-[13px] md:text-[14px] lg:text-[15px]">
-                          {tab.label}
+                          {et("hero.tabs." + i + ".label", tab.label)}
                         </button>
                       </a>
                     ))}
@@ -1082,7 +1170,7 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
               {/* Top half: text + image */}
               <div className="grid border-b border-[#e2dbd7] lg:grid-cols-[1.02fr_0.98fr]" style={{ backgroundColor: "#F5F1EF" }}>
                 <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:ps-[86px] lg:pe-[24px] lg:pb-[56px] lg:pt-[34px]">
-                  <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#DD9842]">{challenge.heading}</h3>
+                  <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#DD9842]">{et("challenge.heading", challenge.heading)}</h3>
                   <p
                     className="mt-8 sm:mt-10 md:mt-14 lg:mt-[72px] text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.35] tracking-[-0.015em] text-[#685956]"
                     style={{ fontFamily: "Georgia, Times New Roman, serif" }}
@@ -1143,10 +1231,10 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
               {(approach.cards as any[]).map((card: any, i: number) => (
                 <div key={i} className="overflow-hidden rounded-[16px] bg-[#F5F1EF] h-full">
                   <div className="h-[210px] sm:h-[220px] w-full overflow-hidden">
-                    <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+                    <img src={card.image} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="px-4 sm:px-[24px] pb-5 sm:pb-[20px] pt-4 sm:pt-[16px]">
-                    <h3 className="border-b border-[#1E6A70] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#685956]">{card.title}</h3>
+                    <h3 className="border-b border-[#1E6A70] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#685956]">{et("results.cards." + i + ".title", card.title)}</h3>
                     <p className="pt-4 text-[14px] leading-[1.7] text-[#685956]">{card.intro}</p>
                     <div className="mt-4 space-y-3">
                       {(card.items as string[]).map((item: string, j: number) => (
@@ -1154,7 +1242,7 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
                           <span className="mt-[2px] flex h-[14px] w-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#DD9842]">
                             <ArrowIcon />
                           </span>
-                          <p className="text-[13px] sm:text-[14px] leading-[1.55] text-[#685956]">{item}</p>
+                          <p className="text-[13px] sm:text-[14px] leading-[1.55] text-[#685956]">{et("challenge.listItems." + i, item)}</p>
                         </div>
                       ))}
                     </div>
@@ -1172,7 +1260,7 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
           <div className="mx-auto container-xl max-w-[1240px]">
             <div className="text-center">
               <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-normal leading-[1.15] tracking-[-0.02em] text-[#685956]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                {results.heading}
+                {et("results.heading", results.heading)}
               </h2>
               <p className="mx-auto mt-3 max-w-[620px] text-[14px] sm:text-[15px] leading-[1.65] text-[#685956]">{results.subtext}</p>
             </div>
@@ -1279,9 +1367,9 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
           <div className="mx-auto container-xl">
             <div className="flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 text-center">
               <h2 className="text-[26px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-normal leading-[1.15] tracking-[-0.02em] text-[#555555]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                {cta.heading}
+                {et("cta.heading", cta.heading)}
               </h2>
-              <p className="mt-4 max-w-2xl text-[15px] sm:text-[16px] leading-[1.6] text-[#555555]">{cta.subtext}</p>
+              <p className="mt-4 max-w-2xl text-[15px] sm:text-[16px] leading-[1.6] text-[#555555]">{et("cta.subtext", cta.subtext, true)}</p>
               <div className="mt-7 flex w-full max-w-[420px] flex-col items-center gap-3">
                 <a href={cta.buttonHref} className="w-full sm:w-fit">
                   <button className="btn-primary w-full">{cta.buttonText}</button>
@@ -1297,6 +1385,8 @@ function PolidermaPage({ data }: { data: CaseStudyData }) {
 }
 
 function CastaniaPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const hero = data.hero as any;
   const challenge = data.challenge as any;
   const goals = data.goals as any;
@@ -1331,7 +1421,7 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
                     {(hero?.tabs as any[])?.map((tab: any, i: number) => (
                       <a key={i} href={tab.target}>
                         <button type="button" className="w-fit rounded-full bg-[#000000] px-5 sm:px-6 py-[12px] sm:py-[13px] text-[13px] sm:text-[15px] font-medium leading-none text-white transition duration-300 hover:translate-y-[-1px] hover:shadow-[0_10px_24px_rgba(0,0,0,0.16)]">
-                          {tab.label}
+                          {et("hero.tabs." + i + ".label", tab.label)}
                         </button>
                       </a>
                     ))}
@@ -1388,7 +1478,7 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
             <div className="overflow-hidden rounded-[14px] bg-[#F8F8F8]">
               <div className="grid border-b border-[#e2dbd7] bg-[#6B5D39] lg:grid-cols-[1.02fr_0.98fr]" style={{ backgroundImage: "url('/assets/Image/castania-banner.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
                 <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:ps-[86px] lg:pe-[0px] lg:pb-[56px] lg:pt-[34px]">
-                  <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#fff]">{challenge.heading}</h3>
+                  <h3 className="text-[14px] sm:text-[22px] font-semibold text-[#fff]">{et("challenge.heading", challenge.heading)}</h3>
                   <p className="mt-8 sm:mt-10 md:mt-14 lg:mt-[72px] text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.35] tracking-[-0.015em] text-[#fff]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
                     {challenge.introTop}
                   </p>
@@ -1432,11 +1522,11 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
               {(goals.cards as any[]).map((card: any, i: number) => (
                 <div key={i} className="overflow-hidden rounded-[16px] bg-[#000000] h-full">
                   <div className="h-[210px] sm:h-[220px] w-full overflow-hidden">
-                    <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+                    <img src={card.image} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="px-4 sm:px-[24px] pb-5 sm:pb-[20px] pt-4 sm:pt-[16px]">
-                    <h3 className="border-b border-[#404040] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#fff]">{card.title}</h3>
-                    <p className="pt-4 text-[14px] sm:text-[14px] leading-[1.7] text-[#fff]">{card.text}</p>
+                    <h3 className="border-b border-[#404040] pb-4 text-[16px] sm:text-[17px] font-semibold text-[#fff]">{et("results.cards." + i + ".title", card.title)}</h3>
+                    <p className="pt-4 text-[14px] sm:text-[14px] leading-[1.7] text-[#fff]">{et("results.cards." + i + ".text", card.text, true)}</p>
                   </div>
                 </div>
               ))}
@@ -1450,7 +1540,7 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
         <section id="role" className="w-full px-7 pb-6 pt-0 sm:px-5 sm:pb-8 lg:py-14">
           <div className="mx-auto md:max-w-[70%]">
             <div className="mx-auto">
-              <h3 className="text-[16px] sm:text-[18px] font-semibold text-[#555555]">{role.heading}</h3>
+              <h3 className="text-[16px] sm:text-[18px] font-semibold text-[#555555]">{et("role.heading", role.heading)}</h3>
               <p className="mt-3 text-[20px] sm:text-[24px] font-normal leading-[1.34] tracking-[-0.015em] text-[#555555]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
                 {role.intro}
               </p>
@@ -1476,10 +1566,10 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
               {(role.cards as any[]).map((card: any, i: number) => (
                 <div key={i} className="rounded-[14px] bg-[#F3F3F3] p-4 sm:p-5">
                   <div className="flex h-[80px] w-[80px] items-center justify-center overflow-hidden rounded-[10px] ">
-                    <img src={card.icon} alt={card.title} className="h-full w-full object-cover" />
+                    <img src={card.icon} alt="" className="h-full w-full object-cover" />
                   </div>
-                  <h4 className="mt-4 text-[16px] sm:text-[17px] font-semibold leading-[1.3] text-[#2C2C2C]">{card.title}</h4>
-                  <p className="mt-3 text-[13px] sm:text-[14px] leading-[1.65] text-[#666666]">{card.text}</p>
+                  <h4 className="mt-4 text-[16px] sm:text-[17px] font-semibold leading-[1.3] text-[#2C2C2C]">{et("results.cards." + i + ".title", card.title)}</h4>
+                  <p className="mt-3 text-[13px] sm:text-[14px] leading-[1.65] text-[#666666]">{et("results.cards." + i + ".text", card.text, true)}</p>
                 </div>
               ))}
             </div>
@@ -1508,7 +1598,7 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
           <div className="mx-auto container-xl max-w-[1240px]">
             <div className="text-center">
               <h2 className="text-[28px] sm:text-[34px] md:text-[40px] font-normal leading-[1.15] tracking-[-0.02em] text-[#5A5A5A]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                {results.heading}
+                {et("results.heading", results.heading)}
               </h2>
               <p className="mx-auto mt-3 max-w-[620px] text-[14px] sm:text-[15px] leading-[1.65] text-[#8A8A8A]">{results.subtext}</p>
             </div>
@@ -1598,9 +1688,9 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
           <div className="mx-auto container-xl">
             <div className="flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 text-center">
               <h2 className="text-[26px] sm:text-[32px] md:text-[36px] lg:text-[40px] font-normal leading-[1.15] tracking-[-0.02em] text-[#555555]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                {cta.heading}
+                {et("cta.heading", cta.heading)}
               </h2>
-              <p className="mt-4 max-w-2xl text-[15px] sm:text-[16px] leading-[1.6] text-[#555555]">{cta.subtext}</p>
+              <p className="mt-4 max-w-2xl text-[15px] sm:text-[16px] leading-[1.6] text-[#555555]">{et("cta.subtext", cta.subtext, true)}</p>
               <div className="mt-7 flex w-full max-w-[420px] flex-col items-center gap-3">
                 <a href={cta.buttonHref} className="w-full sm:w-fit">
                   <button className="btn-primary w-full">{cta.buttonText}</button>
@@ -1615,6 +1705,8 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
 }
 
 function NavadaPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const hero = data.hero as any;
   const dictionary = data.dictionary as any;
   const gate = data.gate as any;
@@ -1761,6 +1853,8 @@ function NavadaPage({ data }: { data: CaseStudyData }) {
 }
 
 function MinglanjeVKlanjcuPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const hero = data.hero as any;
   const illustration = data.illustration as any;
   const quote = data.quote as any;
@@ -1855,6 +1949,8 @@ function MinglanjeVKlanjcuPage({ data }: { data: CaseStudyData }) {
 }
 
 function IdsPage({ data }: { data: CaseStudyData }) {
+  const ctx = useContext(CaseStudyContext);
+  const et = ctx?.et || ((path, def) => def);
   const hero = data.hero as any;
   const videoSection = data.videoSection as any;
   const mockupSection = data.mockupSection as any;

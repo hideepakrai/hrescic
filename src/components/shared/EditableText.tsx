@@ -6,6 +6,7 @@ interface EditableTextProps {
   text: string;
   tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
   className?: string;
+  style?: React.CSSProperties;
   onChange?: (text: string) => void;
   editable?: boolean;
   dangerouslySetInnerHTML?: boolean;
@@ -17,6 +18,7 @@ export default function EditableText({
   text,
   tag: Tag = "span",
   className = "",
+  style,
   onChange,
   editable = false,
   dangerouslySetInnerHTML: useDangerousHTML = false,
@@ -45,15 +47,16 @@ export default function EditableText({
 
   if (!editable) {
     if (useDangerousHTML) {
-      return <Tag className={className} dangerouslySetInnerHTML={{ __html: text || placeholder }} />;
+      return <Tag className={className} style={style} dangerouslySetInnerHTML={{ __html: text || placeholder }} />;
     }
-    return <Tag className={className}>{text || placeholder}</Tag>;
+    return <Tag className={className} style={style}>{text || placeholder}</Tag>;
   }
 
   if (isEditing) {
     const sharedProps = {
       ref: inputRef as any,
       className: `border border-primary bg-transparent px-1 rounded w-full ${className}`,
+      style,
       value,
       onChange: (e: any) => setValue(e.target.value),
       onBlur: handleSave,
@@ -80,6 +83,7 @@ export default function EditableText({
     return (
       <Tag
         className={`cursor-pointer hover:ring-1 hover:ring-primary/30 rounded px-0.5 ${className}`}
+        style={style}
         onClick={() => setIsEditing(true)}
         title="Click to edit"
         dangerouslySetInnerHTML={{ __html: value || placeholder }}
@@ -90,6 +94,7 @@ export default function EditableText({
   return (
     <Tag
       className={`cursor-pointer hover:ring-1 hover:ring-primary/30 rounded px-0.5 ${className}`}
+      style={style}
       onClick={() => setIsEditing(true)}
       title="Click to edit"
     >

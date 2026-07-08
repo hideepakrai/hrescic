@@ -74,11 +74,11 @@ export default function AdminBar() {
         {/* Left — Dashboard link */}
         <div className="flex items-center">
           <Link
-            href="/admin"
+            href="/kalpauth"
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-200 font-bold uppercase tracking-wider text-[11px]"
           >
             <LayoutDashboard className="w-3.5 h-3.5" style={{ color: "#41C717" }} />
-            <span>ADMIN DASHBOARD</span>
+            <span>ADMIN DASHBOARD </span>
           </Link>
         </div>
 
