@@ -16,7 +16,7 @@ const UpdateCurrentPage = () => {
 
   const {authUser,isAuthenticated}= useSelector((state:RootState)=>state.auth)
 
-  const { allPages } = useSelector((state: RootState) => state.pages)
+  const { allPages, isEditablePage } = useSelector((state: RootState) => state.pages)
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
   const hasLocalePrefix = SUPPORTED_LOCALES.includes(segments[0]);
@@ -59,6 +59,35 @@ const UpdateCurrentPage = () => {
       dispatch(setEditMode(false))
     }
   }, [authUser,isAuthenticated]);
+
+  // Prevent link and button navigation when edit mode is active to facilitate inline editing without page traversal
+  useEffect(() => {
+    if (!isEditablePage) return;
+
+    const handleLinkClick = (e: MouseEvent) => {
+      let target = e.target as HTMLElement | null;
+      while (target && target !== document.body) {
+        if (target.tagName === 'A' || target.tagName === 'BUTTON') {
+          // Exclude Admin Bar and edit controls so dashboard access/mode toggling still works
+          if (
+            target.closest('[data-annotator-ui="true"]') ||
+            target.closest('.edit-mode-control') ||
+            target.closest('.admin-bar-class')
+          ) {
+            return;
+          }
+          e.preventDefault();
+          return;
+        }
+        target = target.parentElement;
+      }
+    };
+
+    document.addEventListener('click', handleLinkClick, true);
+    return () => {
+      document.removeEventListener('click', handleLinkClick, true);
+    };
+  }, [isEditablePage]);
 
   return (
     <GetAllPage />
