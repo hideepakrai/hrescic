@@ -31,6 +31,21 @@ export default function AdminBar() {
   const [isVisible, setIsVisible] = useState(true);
   const commentCount = annotations.length;
 
+  const handleToggleComments = () => {
+    if (!isCommentModeActive && isEditablePage) {
+      dispatch(setEditMode(false));
+    }
+    toggleCommentMode();
+  };
+
+  const handleToggleEditMode = () => {
+    const nextEditMode = !isEditablePage;
+    if (nextEditMode && isCommentModeActive) {
+      toggleCommentMode();
+    }
+    dispatch(setEditMode(nextEditMode));
+  };
+
   if (!isAdmin) return null;
 
   // Collapsed floating button when bar is hidden
@@ -72,7 +87,7 @@ export default function AdminBar() {
 
           {/* Comments toggle */}
           <button
-            onClick={() => toggleCommentMode()}
+            onClick={handleToggleComments}
             style={
               isCommentModeActive
                 ? { borderColor: "#41C717", color: "#41C717", backgroundColor: "rgba(65,199,23,0.1)" }
@@ -86,7 +101,7 @@ export default function AdminBar() {
 
           {/* Edit Mode — connected to real Redux state */}
           <button
-            onClick={() => dispatch(setEditMode(!isEditablePage))}
+            onClick={handleToggleEditMode}
             style={
               isEditablePage
                 ? { backgroundColor: "#41C717", borderColor: "#41C717", color: "#1D2931", boxShadow: "0 0 12px rgba(65,199,23,0.45)" }

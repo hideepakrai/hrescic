@@ -25,6 +25,7 @@ export const AnnotatorPlugin: React.FC = () => {
     addAnnotation,
     removeAnnotation,
     setActiveAnnotationId,
+    activeAnnotationId,
     settings,
     setAnnotations
   } = useAnnotatorStore();
@@ -75,17 +76,34 @@ export const AnnotatorPlugin: React.FC = () => {
   const handleCanvasClick = (e: React.MouseEvent) => {
     if (!isCommentModeActive) return;
 
+    // 1. If there's an active annotation details card open, close it
+    if (activeAnnotationId) {
+      e.preventDefault();
+      e.stopPropagation();
+      setActiveAnnotationId(null);
+      return;
+    }
+
+    // 2. If a draft popup is open, close/cancel it
+    if (draft) {
+      e.preventDefault();
+      e.stopPropagation();
+      setDraft(null);
+      setDraftContent('');
+      return;
+    }
+
     e.preventDefault();
     e.stopPropagation();
 
-    // 1. Temporarily hide the capture overlay so we can find the real element underneath
+    // 3. Temporarily hide the capture overlay so we can find the real element underneath
     const overlay = e.currentTarget as HTMLElement;
     overlay.style.display = 'none';
 
-    // 2. Find the actual target element
+    // 4. Find the actual target element
     const target = document.elementFromPoint(e.clientX, e.clientY);
 
-    // 3. Restore the overlay
+    // 5. Restore the overlay
     overlay.style.display = 'block';
 
     if (!target || target === document.body || target === document.documentElement) {
@@ -96,12 +114,12 @@ export const AnnotatorPlugin: React.FC = () => {
       return;
     }
 
-    // 4. Calculate relative percentages
+    // 6. Calculate relative percentages
     const rect = target.getBoundingClientRect();
     const offsetX = ((e.clientX - rect.left) / rect.width) * 100;
     const offsetY = ((e.clientY - rect.top) / rect.height) * 100;
 
-    // 5. Generate robust selector
+    // 7. Generate robust selector
     const selector = getCssSelector(target);
 
     setDraft({
@@ -176,16 +194,14 @@ export const AnnotatorPlugin: React.FC = () => {
       {isCommentModeActive && (
         <>
           {/* Invisible overlay to capture clicks when in annotation mode */}
-          {!draft && (
-            <div
-              data-annotator-ui="true"
-              className="fixed inset-x-0 bottom-0 top-[44px] z-[9998] cursor-crosshair"
-              onClickCapture={handleCanvasClick}
-            >
-              {/* Subtle border to indicate mode is active */}
-              <div className="absolute inset-0 border-4 border-indigo-500/30 pointer-events-none" />
-            </div>
-          )}
+          <div
+            data-annotator-ui="true"
+            className="fixed inset-x-0 bottom-0 top-[44px] z-[9998] cursor-crosshair"
+            onClickCapture={handleCanvasClick}
+          >
+            {/* Subtle border to indicate mode is active */}
+            <div className="absolute inset-0 border-4 border-indigo-500/30 pointer-events-none" />
+          </div>
 
           {/* Render existing markers */}
           {annotations.map((annotation: Annotation) => (
