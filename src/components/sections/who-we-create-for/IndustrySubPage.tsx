@@ -129,9 +129,47 @@ const GoldButton = ({ children, href, bgColor, textColor, isTourism }: { childre
   return <button type="button" className={baseClass} style={style}>{children}</button>;
 };
 
+import { useAppSelector } from "@/lib/store/hooks";
+import { usePathname } from "next/navigation";
+import { SUPPORTED_LOCALES } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/LocaleContext";
+import { useEditable } from "@/lib/store/pages/useEditable";
+import EditableText from "@/components/shared/EditableText";
+
 export default function IndustrySubPage({ data }: { data: IndustryData }) {
   const { hero, theme, reality, growth, cases, structure, cta } = data;
   const [loadVideo, setLoadVideo] = useState(false);
+
+  const pathname = usePathname();
+  const locale = useLocale();
+  const currentPages = useAppSelector((state) => state.pages.currentPages);
+
+  const slug = useMemo(() => {
+    if (!pathname) return "home";
+    const segments = pathname.split('/').filter(Boolean);
+    const hasLocalePrefix = SUPPORTED_LOCALES.includes(segments[0] as any);
+    const pathSegments = hasLocalePrefix ? segments.slice(1) : segments;
+    return pathSegments.join('/') || "home";
+  }, [pathname]);
+
+  const blockId = currentPages?.content?.[0]?.id;
+  const { isEditable, handleChange } = useEditable(blockId || "");
+
+  // Read raw localizable props from Redux if slug matches
+  const reduxProps = useMemo(() => {
+    if (currentPages && (currentPages.slug === slug || currentPages.slug?.replace(/\/sub\//g, '/') === slug)) {
+      const content = Array.isArray(currentPages.content) ? currentPages.content[0] : null;
+      return content?.props;
+    }
+    return null;
+  }, [currentPages, slug]);
+
+  const val = (localizableField: any) => {
+    if (localizableField && typeof localizableField === "object") {
+      return localizableField[locale] || localizableField["en"] || "";
+    }
+    return localizableField || "";
+  };
 
   const isTourism = hero.breadcrumbLabel.toLowerCase().includes("tourism");
   const heroTextColor = isTourism ? "#ffffff" : theme.textColor;
@@ -157,12 +195,40 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
             <div className="flex items-center order-2 lg:order-1">
               <div className="w-full px-4 py-7 sm:px-8 sm:py-10 md:px-10 md:py-7 lg:pb-[74px] lg:ps-[75px] lg:pe-8">
                 <div className="mb-7 flex flex-wrap items-center gap-2 sm:gap-3 sm:mb-10 lg:mb-12">
-                  <span className="text-[14px] sm:text-[20px] font-semibold" style={{ color: heroTextColor }}>{hero.breadcrumb}</span>
+                  <EditableText
+                    text={reduxProps ? val(reduxProps.hero?.breadcrumb) : hero.breadcrumb}
+                    editable={isEditable}
+                    onChange={handleChange(`props.hero.breadcrumb.${locale}`)}
+                    tag="span"
+                    className="text-[14px] sm:text-[20px] font-semibold"
+                    style={{ color: heroTextColor }}
+                  />
                   <span className="text-[#9b9b9b]">|</span>
-                  <span className="text-[13px] italic" style={{ color: heroTextColor }}>{hero.breadcrumbLabel}</span>
+                  <EditableText
+                    text={reduxProps ? val(reduxProps.hero?.breadcrumbLabel) : hero.breadcrumbLabel}
+                    editable={isEditable}
+                    onChange={handleChange(`props.hero.breadcrumbLabel.${locale}`)}
+                    tag="span"
+                    className="text-[13px] italic"
+                    style={{ color: heroTextColor }}
+                  />
                 </div>
                 <div className="pt-8">
-                  {isTourism ? (
+                  {isEditable ? (
+                    <EditableText
+                      text={reduxProps ? val(reduxProps.hero?.heading) : hero.heading}
+                      editable={isEditable}
+                      onChange={handleChange(`props.hero.heading.${locale}`)}
+                      tag="h1"
+                      className="pe-4 text-[28px] sm:text-[34px] md:text-[40px] lg:text-[38px] font-[400] leading-[1.08] tracking-[-0.03em]"
+                      style={{
+                        fontFamily: isTourism ? "Georgia, Times New Roman, serif" : (hero.headingGradient ? "Inter, Georgia, Times New Roman, serif" : "Georgia, Times New Roman, serif"),
+                        color: isTourism ? "#fff" : theme.textColor,
+                        backgroundImage: !isTourism && hero.headingGradient ? hero.headingGradient : "none",
+                      }}
+                      multiline
+                    />
+                  ) : isTourism ? (
                     <h1 className="pe-4 hero-title text-[28px] sm:text-[34px] md:text-[40px] lg:text-[38px] font-[400] leading-[1.08] tracking-[-0.03em] text-[#fff]"
                       style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
                       <span className="text-[#3EDA00] pe-2">Tourism & Travel brands</span>
@@ -180,15 +246,31 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                       {renderHeroHeading(hero.heading, theme.accentColor)}
                     </h1>
                   )}
-                  <p className="mt-5 sm:mt-6 lg:mt-4 max-w-[430px] text-[15px] sm:text-[17px] leading-[1.75]" style={{ color: heroTextColor }}>
-                    {hero.subtext}
-                  </p>
+                  <EditableText
+                    text={reduxProps ? val(reduxProps.hero?.subtext) : hero.subtext}
+                    editable={isEditable}
+                    onChange={handleChange(`props.hero.subtext.${locale}`)}
+                    tag="p"
+                    className="mt-5 sm:mt-6 lg:mt-4 max-w-[430px] text-[15px] sm:text-[17px] leading-[1.75]"
+                    style={{ color: heroTextColor }}
+                    multiline
+                  />
                   <div className="mt-4 sm:mt-8 lg:mt-6 flex flex-col gap-3">
                     <GoldButton bgColor={theme.buttonColor} textColor={theme.buttonTextColor} href={hero.button1Href} isTourism={isTourism}>
-                      {hero.button1Text}
+                      <EditableText
+                        text={reduxProps ? val(reduxProps.hero?.button1Text) : hero.button1Text}
+                        editable={isEditable}
+                        onChange={handleChange(`props.hero.button1Text.${locale}`)}
+                        tag="span"
+                      />
                     </GoldButton>
                     <GoldButton bgColor={theme.buttonColor} textColor={theme.buttonTextColor} href={hero.button2Href} isTourism={isTourism}>
-                      {hero.button2Text}
+                      <EditableText
+                        text={reduxProps ? val(reduxProps.hero?.button2Text) : hero.button2Text}
+                        editable={isEditable}
+                        onChange={handleChange(`props.hero.button2Text.${locale}`)}
+                        tag="span"
+                      />
                     </GoldButton>
                   </div>
                 </div>
@@ -221,33 +303,67 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
         <div className="mx-auto container-xl rounded-[2px]">
           <div className="px-4 py-10 sm:px-8 sm:py-12 md:px-10 lg:px-[120px] lg:py-[68px]">
             <div className="mx-auto text-center" style={{ maxWidth: reality.issues.length > 4 ? "700px" : undefined }}>
-              <h2 className="text-[26px] sm:text-[31px] md:text-[38px] lg:text-[40px] font-normal leading-[1.2] tracking-[-0.02em]"
-                style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}>
-                {reality.heading}
-              </h2>
-              <p className="mx-auto mt-3 max-w-[420px] text-[14px] sm:text-[15px] leading-[1.55]" style={{ color: bodyTextColor }}>
-                {reality.subtext}
-              </p>
+              <EditableText
+                text={reduxProps ? val(reduxProps.reality?.heading) : reality.heading}
+                editable={isEditable}
+                onChange={handleChange(`props.reality.heading.${locale}`)}
+                tag="h2"
+                className="text-[26px] sm:text-[31px] md:text-[38px] lg:text-[40px] font-normal leading-[1.2] tracking-[-0.02em]"
+                style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}
+                multiline
+              />
+              <EditableText
+                text={reduxProps ? val(reduxProps.reality?.subtext) : reality.subtext}
+                editable={isEditable}
+                onChange={handleChange(`props.reality.subtext.${locale}`)}
+                tag="p"
+                className="mx-auto mt-3 max-w-[420px] text-[14px] sm:text-[15px] leading-[1.55]"
+                style={{ color: bodyTextColor }}
+                multiline
+              />
             </div>
             <div className="mt-10 sm:mt-[60px] grid gap-y-10 lg:grid-cols-[1fr_1.14fr] lg:gap-x-[70px] xl:gap-x-[110px]">
               <div className="max-w-[390px]">
-                <h3 className="text-[16px] sm:text-[17px] font-semibold leading-[1.3]" style={{ color: theme.textColor }}>
-                  {reality.whyHeading}
-                </h3>
-                <p className="mt-4 sm:mt-5 text-[22px] sm:text-[26px] md:text-[26px] font-normal leading-[1.28] tracking-[-0.015em]"
-                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: bodyTextColor }}>
-                  {reality.whyText}
-                </p>
+                <EditableText
+                  text={reduxProps ? val(reduxProps.reality?.whyHeading) : reality.whyHeading}
+                  editable={isEditable}
+                  onChange={handleChange(`props.reality.whyHeading.${locale}`)}
+                  tag="h3"
+                  className="text-[16px] sm:text-[17px] font-semibold leading-[1.3]"
+                  style={{ color: theme.textColor }}
+                />
+                <EditableText
+                  text={reduxProps ? val(reduxProps.reality?.whyText) : reality.whyText}
+                  editable={isEditable}
+                  onChange={handleChange(`props.reality.whyText.${locale}`)}
+                  tag="p"
+                  className="mt-4 sm:mt-5 text-[22px] sm:text-[26px] md:text-[26px] font-normal leading-[1.28] tracking-[-0.015em]"
+                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: bodyTextColor }}
+                  multiline
+                />
               </div>
               <div className="max-w-[520px]">
-                <h3 className="text-[16px] sm:text-[17px] font-semibold leading-[1.3]" style={{ color: theme.textColor }}>
-                  {reality.whatHeading}
-                </h3>
+                <EditableText
+                  text={reduxProps ? val(reduxProps.reality?.whatHeading) : reality.whatHeading}
+                  editable={isEditable}
+                  onChange={handleChange(`props.reality.whatHeading.${locale}`)}
+                  tag="h3"
+                  className="text-[16px] sm:text-[17px] font-semibold leading-[1.3]"
+                  style={{ color: theme.textColor }}
+                />
                 <div className="mt-4 sm:mt-5 space-y-[14px]">
                   {reality.issues.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
+                    <div key={i} className="flex items-start gap-3 w-full">
                       <AlertDot color={theme.accentColor} />
-                      <p className="text-[14px] sm:text-[15px] leading-[1.5]" style={{ color: bodyTextColor }}>{item}</p>
+                      <EditableText
+                        text={reduxProps && Array.isArray(reduxProps.reality?.issues) ? val(reduxProps.reality.issues[i]) : item}
+                        editable={isEditable}
+                        onChange={handleChange(`props.reality.issues.${i}.${locale}`)}
+                        tag="p"
+                        className="text-[14px] sm:text-[15px] leading-[1.5] w-full"
+                        style={{ color: bodyTextColor }}
+                        multiline
+                      />
                     </div>
                   ))}
                 </div>
@@ -294,37 +410,64 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
           <div className="overflow-hidden rounded-[14px]" style={{ backgroundColor: theme.growthPanelBg }}>
             <div className="grid border-b border-[#e2dbd7] lg:grid-cols-[1.02fr_0.98fr]" style={{ backgroundColor: theme.growthBg }}>
               <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:ps-[86px] lg:pe-[24px] lg:pb-[56px] lg:pt-[34px]">
-                <h3 className="text-[14px] sm:text-[22px] font-semibold" style={{ color: theme.accentColor }}>
-                  {growth.heading}
-                </h3>
-                <p className="mt-8 sm:mt-10 md:mt-14 lg:mt-[72px] text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.35] tracking-[-0.015em]"
-                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: growthTextColor }}>
-                  {growth.text}
-                </p>
+                <EditableText
+                  text={reduxProps ? val(reduxProps.growth?.heading) : growth.heading}
+                  editable={isEditable}
+                  onChange={handleChange(`props.growth.heading.${locale}`)}
+                  tag="h3"
+                  className="text-[14px] sm:text-[22px] font-semibold"
+                  style={{ color: theme.accentColor }}
+                />
+                <EditableText
+                  text={reduxProps ? val(reduxProps.growth?.text) : growth.text}
+                  editable={isEditable}
+                  onChange={handleChange(`props.growth.text.${locale}`)}
+                  tag="p"
+                  className="mt-8 sm:mt-10 md:mt-14 lg:mt-[72px] text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.35] tracking-[-0.015em]"
+                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: growthTextColor }}
+                  multiline
+                />
               </div>
               <div className="flex items-center justify-center px-5 py-7 sm:px-8 sm:py-8 md:px-10 lg:px-[46px]">
-                <img src={growth.image} alt={growth.heading} className="w-full max-w-[410px] object-contain" />
+                <img src={growth.image} alt="" className="w-full max-w-[410px] object-contain" />
               </div>
             </div>
             <div className="px-4 py-8 sm:px-8 sm:py-10 md:px-10 lg:px-[86px] lg:pb-[50px] lg:pt-[60px]">
-              <h3 className="text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.3] tracking-[-0.015em]"
-                style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}>
-                {growth.scaleHeading}
-              </h3>
+              <EditableText
+                text={reduxProps ? val(reduxProps.growth?.scaleHeading) : growth.scaleHeading}
+                editable={isEditable}
+                onChange={handleChange(`props.growth.scaleHeading.${locale}`)}
+                tag="h3"
+                className="text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.3] tracking-[-0.015em]"
+                style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}
+              />
               <div className="mt-6 sm:mt-7 space-y-[14px]">
                 {growth.scaleItems.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
+                  <div key={i} className="flex items-start gap-3 w-full">
                     <AlertDot color={theme.accentColor} />
-                    <p className="text-[14px] sm:text-[15px] leading-[1.5]" style={{ color: bodyTextColor }}>{item}</p>
+                    <EditableText
+                      text={reduxProps && Array.isArray(reduxProps.growth?.scaleItems) ? val(reduxProps.growth.scaleItems[i]) : item}
+                      editable={isEditable}
+                      onChange={handleChange(`props.growth.scaleItems.${i}.${locale}`)}
+                      tag="p"
+                      className="text-[14px] sm:text-[15px] leading-[1.5] w-full"
+                      style={{ color: bodyTextColor }}
+                      multiline
+                    />
                   </div>
                 ))}
               </div>
               <div className="mt-9 sm:mt-12 lg:mt-[48px] flex items-start gap-3 sm:gap-4">
                 <QuoteMark bgColor={isTourism ? "#ECECEC" : theme.growthPanelBg} textColor={theme.accentColor} />
-                <p className="text-[20px] sm:text-[22px] font-normal leading-[1.35] tracking-[-0.015em]"
-                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}>
-                  {growth.quote}
-                </p>
+                <EditableText
+                  text={reduxProps ? val(reduxProps.growth?.quote) : growth.quote}
+                  editable={isEditable}
+                  onChange={handleChange(`props.growth.quote.${locale}`)}
+                  tag="p"
+                  className="text-[20px] sm:text-[22px] font-normal leading-[1.35] tracking-[-0.015em]"
+                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}
+                  multiline
+                />
               </div>
             </div>
           </div>
@@ -335,18 +478,33 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
       <section className="w-full px-3 pb-6 pt-0 sm:px-5 sm:pb-8 lg:py-14">
         <div className="mx-auto container-xl">
           <div className="text-center">
-            <h2 className="text-[26px] sm:text-[31px] md:text-[36px] lg:text-[40px] font-normal leading-[1.18] tracking-[-0.02em]"
-              style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}>
-              {cases.heading}
-            </h2>
-            {cases.description && (
-              <p className="mt-2 text-[15px] sm:text-[16px] font-[500] text-[#555555] py-3 whitespace-pre-line">
-                {cases.description}
-              </p>
+            <EditableText
+              text={reduxProps ? val(reduxProps.cases?.heading) : cases.heading}
+              editable={isEditable}
+              onChange={handleChange(`props.cases.heading.${locale}`)}
+              tag="h2"
+              className="text-[26px] sm:text-[31px] md:text-[36px] lg:text-[40px] font-normal leading-[1.18] tracking-[-0.02em]"
+              style={{ fontFamily: "Georgia, Times New Roman, serif", color: theme.textColor }}
+              multiline
+            />
+            {(cases.description || isEditable) && (
+              <EditableText
+                text={reduxProps ? val(reduxProps.cases?.description) : (cases.description || "")}
+                editable={isEditable}
+                onChange={handleChange(`props.cases.description.${locale}`)}
+                tag="p"
+                className="mt-2 text-[15px] sm:text-[16px] font-[500] text-[#555555] py-3 whitespace-pre-line"
+                multiline
+              />
             )}
-            <p className="mt-2 text-[15px] sm:text-[22px] font-semibold" style={{ color: theme.textColor }}>
-              {cases.subheading}
-            </p>
+            <EditableText
+              text={reduxProps ? val(reduxProps.cases?.subheading) : cases.subheading}
+              editable={isEditable}
+              onChange={handleChange(`props.cases.subheading.${locale}`)}
+              tag="p"
+              className="mt-2 text-[15px] sm:text-[22px] font-semibold"
+              style={{ color: theme.textColor }}
+            />
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {cases.cards.map((card, i) => {
@@ -368,17 +526,35 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                   style={inlineBgColor ? { backgroundColor: inlineBgColor } : {}}
                 >
                   <div className="h-[210px] sm:h-[220px] w-full overflow-hidden">
-                    <img src={card.image} alt={card.highlight} className="h-full w-full object-cover" />
+                    <img src={card.image} alt="" className="h-full w-full object-cover" />
                   </div>
                   <div className="px-4 sm:px-[18px] pb-5 sm:pb-[26px] pt-4 sm:pt-[16px]">
-                    <h3 className="border-b border-[#dfd8d4] pb-3 text-[16px] sm:text-[17px] font-semibold"
+                    <h3 className="border-b border-[#dfd8d4] pb-3 text-[16px] sm:text-[17px] font-semibold flex flex-wrap"
                       style={{ color: cardTextColor }}>
-                      {card.title}<span style={{ color: theme.accentColor }}>{card.highlight}</span>
+                      <EditableText
+                        text={reduxProps && Array.isArray(reduxProps.cases?.cards) ? val(reduxProps.cases.cards[i]?.title) : card.title}
+                        editable={isEditable}
+                        onChange={handleChange(`props.cases.cards.${i}.title.${locale}`)}
+                        tag="span"
+                      />
+                      <EditableText
+                        text={reduxProps && Array.isArray(reduxProps.cases?.cards) ? val(reduxProps.cases.cards[i]?.highlight) : card.highlight}
+                        editable={isEditable}
+                        onChange={handleChange(`props.cases.cards.${i}.highlight.${locale}`)}
+                        tag="span"
+                        style={{ color: theme.accentColor }}
+                        className="ps-1"
+                      />
                     </h3>
-                    <p className="pt-4 text-[14px] sm:text-[15px] leading-[1.65]"
-                      style={{ color: cardTextColor }}>
-                      {card.text}
-                    </p>
+                    <EditableText
+                      text={reduxProps && Array.isArray(reduxProps.cases?.cards) ? val(reduxProps.cases.cards[i]?.text) : card.text}
+                      editable={isEditable}
+                      onChange={handleChange(`props.cases.cards.${i}.text.${locale}`)}
+                      tag="p"
+                      className="pt-4 text-[14px] sm:text-[15px] leading-[1.65]"
+                      style={{ color: cardTextColor }}
+                      multiline
+                    />
                   </div>
                 </div>
               );
@@ -386,7 +562,12 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
           </div>
           <div className="mt-8 flex justify-center">
             <GoldButton bgColor={theme.buttonColor} textColor={theme.buttonTextColor} href={cases.ctaHref} isTourism={isTourism}>
-              {cases.ctaText}
+              <EditableText
+                text={reduxProps ? val(reduxProps.cases?.ctaText) : cases.ctaText}
+                editable={isEditable}
+                onChange={handleChange(`props.cases.ctaText.${locale}`)}
+                tag="span"
+              />
             </GoldButton>
           </div>
         </div>
@@ -396,13 +577,23 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
       <section className="w-full px-3 pb-6 pt-0 sm:px-5 sm:pb-8 lg:py-14">
         <div className="mx-auto container-xl">
           <div className="mx-auto max-w-[760px] text-left lg:ml-[108px]">
-            <h3 className="text-[16px] sm:text-[22px] font-semibold" style={{ color: theme.textColor }}>
-              {structure.heading}
-            </h3>
-            <p className="mt-3 text-[22px] sm:text-[26px] md:text-[28px] font-normal leading-[1.33] tracking-[-0.015em]"
-              style={{ fontFamily: "Georgia, Times New Roman, serif", color: bodyTextColor }}>
-              {structure.text}
-            </p>
+            <EditableText
+              text={reduxProps ? val(reduxProps.structure?.heading) : structure.heading}
+              editable={isEditable}
+              onChange={handleChange(`props.structure.heading.${locale}`)}
+              tag="h3"
+              className="text-[16px] sm:text-[22px] font-semibold"
+              style={{ color: theme.textColor }}
+            />
+            <EditableText
+              text={reduxProps ? val(reduxProps.structure?.text) : structure.text}
+              editable={isEditable}
+              onChange={handleChange(`props.structure.text.${locale}`)}
+              tag="p"
+              className="mt-3 text-[22px] sm:text-[26px] md:text-[28px] font-normal leading-[1.33] tracking-[-0.015em]"
+              style={{ fontFamily: "Georgia, Times New Roman, serif", color: bodyTextColor }}
+              multiline
+            />
           </div>
           <div className="mx-auto mt-8 md:container-xl lg:px-[108px]">
             {(() => {
@@ -416,11 +607,39 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                 >
                   {structure.images ? (
                     <>
-                      <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
-                        <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]" style={{ color: theme.textColor, fontFamily: "Georgia, Times New Roman, serif" }}>
-                          {renderHighlightedText(structure.fullText, structure.accentText, "#CE1DB7", theme.textColor)}
-                        </p>
-                      </div>
+                      {isEditable ? (
+                        <div className="flex flex-col gap-2 p-4 w-full justify-center">
+                          <div>
+                            <span className="text-xs text-gray-400">Full Text:</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.fullText) : structure.fullText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.fullText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: theme.textColor, fontFamily: "Georgia, Times New Roman, serif" }}
+                              multiline
+                            />
+                          </div>
+                          <div>
+                            <span className="text-xs text-gray-400">Accent Text (to highlight in accent color):</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.accentText) : structure.accentText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.accentText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: theme.accentColor, fontFamily: "Georgia, Times New Roman, serif" }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
+                          <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]" style={{ color: theme.textColor, fontFamily: "Georgia, Times New Roman, serif" }}>
+                            {renderHighlightedText(structure.fullText, structure.accentText, "#CE1DB7", theme.textColor)}
+                          </p>
+                        </div>
+                      )}
                       <div className="grid grid-cols-2 gap-4 p-4">
                         <div className="col-span-1 row-span-2 rounded-[12px] overflow-hidden bg-[#F2EAF8]">
                           <img src={structure.images.big} alt="" className="h-full w-full object-cover" />
@@ -435,35 +654,97 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                     </>
                   ) : structureImage ? (
                     <>
-                      <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
-                        <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]"
-                          style={{ fontFamily: "Georgia, Times New Roman, serif", color: isTourism ? "#ffffff" : "#73635b" }}>
-                          {renderHighlightedText(structure.fullText, structure.accentText, theme.accentColor, isTourism ? "#ffffff" : "#73635b")}
-                        </p>
-                      </div>
+                      {isEditable ? (
+                        <div className="flex flex-col gap-2 p-4 w-full justify-center">
+                          <div>
+                            <span className="text-xs text-gray-400">Full Text:</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.fullText) : structure.fullText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.fullText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: isTourism ? "#ffffff" : "#73635b", fontFamily: "Georgia, Times New Roman, serif" }}
+                              multiline
+                            />
+                          </div>
+                          <div>
+                            <span className="text-xs text-gray-400">Accent Text:</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.accentText) : structure.accentText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.accentText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: theme.accentColor, fontFamily: "Georgia, Times New Roman, serif" }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
+                          <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]"
+                            style={{ fontFamily: "Georgia, Times New Roman, serif", color: isTourism ? "#ffffff" : "#73635b" }}>
+                            {renderHighlightedText(structure.fullText, structure.accentText, theme.accentColor, isTourism ? "#ffffff" : "#73635b")}
+                          </p>
+                        </div>
+                      )}
                       <div className="h-full min-h-[220px] sm:min-h-[260px]">
                         <img src={structureImage} alt="" className="h-full w-full object-cover" />
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
-                        <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]"
-                          style={{ fontFamily: "Georgia, Times New Roman, serif", color: isTourism ? "#ffffff" : "#73635b" }}>
-                          {renderHighlightedText(structure.fullText, structure.accentText, theme.accentColor, isTourism ? "#ffffff" : "#73635b")}
-                        </p>
-                      </div>
+                      {isEditable ? (
+                        <div className="flex flex-col gap-2 p-4 w-full justify-center">
+                          <div>
+                            <span className="text-xs text-gray-400">Full Text:</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.fullText) : structure.fullText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.fullText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: isTourism ? "#ffffff" : "#73635b", fontFamily: "Georgia, Times New Roman, serif" }}
+                              multiline
+                            />
+                          </div>
+                          <div>
+                            <span className="text-xs text-gray-400">Accent Text:</span>
+                            <EditableText
+                              text={reduxProps ? val(reduxProps.structure?.accentText) : structure.accentText}
+                              editable={isEditable}
+                              onChange={handleChange(`props.structure.accentText.${locale}`)}
+                              tag="p"
+                              className="text-[20px] font-normal leading-[1.38]"
+                              style={{ color: theme.accentColor, fontFamily: "Georgia, Times New Roman, serif" }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
+                          <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]"
+                            style={{ fontFamily: "Georgia, Times New Roman, serif", color: isTourism ? "#ffffff" : "#73635b" }}>
+                            {renderHighlightedText(structure.fullText, structure.accentText, theme.accentColor, isTourism ? "#ffffff" : "#73635b")}
+                          </p>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>
               );
             })()}
-            {(structure.bottomText || structure.images) && (
+            {(structure.bottomText || structure.images || isEditable) && (
               <div className="text-center py-6 rounded-b-[16px] mt-[-6px]"
                 style={{ backgroundColor: structure.images ? "#F3F3F3" : (isTourism ? theme.growthBg : theme.bgColor) }}>
-                <p className="text-[18px] sm:text-[22px]" style={{ fontFamily: "Georgia, Times New Roman, serif", color: structure.images ? theme.textColor : "#fff" }}>
-                  {structure.bottomText}
-                </p>
+                <EditableText
+                  text={reduxProps ? val(reduxProps.structure?.bottomText) : (structure.bottomText || "")}
+                  editable={isEditable}
+                  onChange={handleChange(`props.structure.bottomText.${locale}`)}
+                  tag="p"
+                  className="text-[18px] sm:text-[22px]"
+                  style={{ fontFamily: "Georgia, Times New Roman, serif", color: structure.images ? theme.textColor : "#fff" }}
+                  multiline
+                />
               </div>
             )}
           </div>
@@ -474,21 +755,42 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
       <section className="w-full px-3 pb-[54px] pt-3 sm:px-5 sm:pb-[80px] lg:pb-[90px]">
         <div className="mx-auto container-xl">
           <div className="flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 text-center">
-            <h2 className="text-[26px] sm:text-[32px] md:text-[36px] lg:text-[41px] font-normal leading-[1.15] tracking-[-0.02em]"
-              style={{ fontFamily: "Georgia, Times New Roman, serif", color: ctaTextColor }}>
-              {cta.heading}
-            </h2>
-            {cta.subtext && (
-              <p className="mt-4 max-w-[470px] text-[15px] sm:text-[16px] leading-[1.6]" style={{ color: ctaTextColor }}>
-                {cta.subtext}
-              </p>
+            <EditableText
+              text={reduxProps ? val(reduxProps.cta?.heading) : cta.heading}
+              editable={isEditable}
+              onChange={handleChange(`props.cta.heading.${locale}`)}
+              tag="h2"
+              className="text-[26px] sm:text-[32px] md:text-[36px] lg:text-[41px] font-normal leading-[1.15] tracking-[-0.02em]"
+              style={{ fontFamily: "Georgia, Times New Roman, serif", color: ctaTextColor }}
+              multiline
+            />
+            {(cta.subtext || isEditable) && (
+              <EditableText
+                text={reduxProps ? val(reduxProps.cta?.subtext) : (cta.subtext || "")}
+                editable={isEditable}
+                onChange={handleChange(`props.cta.subtext.${locale}`)}
+                tag="p"
+                className="mt-4 max-w-[470px] text-[15px] sm:text-[16px] leading-[1.6]"
+                style={{ color: ctaTextColor }}
+                multiline
+              />
             )}
             <div className="mt-7 flex w-full max-w-[420px] flex-col items-center gap-3">
               <GoldButton bgColor={theme.buttonColor} textColor={theme.buttonTextColor} href={cta.button1Href} isTourism={isTourism}>
-                {cta.button1Text}
+                <EditableText
+                  text={reduxProps ? val(reduxProps.cta?.button1Text) : cta.button1Text}
+                  editable={isEditable}
+                  onChange={handleChange(`props.cta.button1Text.${locale}`)}
+                  tag="span"
+                />
               </GoldButton>
               <GoldButton bgColor={theme.buttonColor} textColor={theme.buttonTextColor} href={cta.button2Href} isTourism={isTourism}>
-                {cta.button2Text}
+                <EditableText
+                  text={reduxProps ? val(reduxProps.cta?.button2Text) : cta.button2Text}
+                  editable={isEditable}
+                  onChange={handleChange(`props.cta.button2Text.${locale}`)}
+                  tag="span"
+                />
               </GoldButton>
             </div>
           </div>

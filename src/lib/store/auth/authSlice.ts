@@ -38,6 +38,7 @@ export const  loginUser = createAsyncThunk(
       const data: LoginResponse = await res.json();
       if (typeof window !== 'undefined') {
         localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('auth_user', JSON.stringify(data));
       }
       return data;
     } catch (err: any) {
@@ -63,6 +64,7 @@ const authSlice = createSlice({
       state.error = null;
       if (typeof window !== 'undefined') {
         localStorage.removeItem('access_token');
+        localStorage.removeItem('auth_user');
       }
     },
     clearError: (state) => {

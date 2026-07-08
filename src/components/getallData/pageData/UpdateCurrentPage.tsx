@@ -7,19 +7,17 @@ import { usePathname } from "next/navigation";
 
 import GetAllPage from "./GetAllPage";
 
-import dynamic from 'next/dynamic';
 import { setCurrentPages, setEditMode } from "@/lib/store/pages/pagesSlice";
+import { setAuth } from "@/lib/store/auth/authSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { RootState } from "@/lib/store/store";
 import { SUPPORTED_LOCALES } from "@/lib/i18n";
-
-const EditModeToggle = dynamic(() => import('@/components/EditMode/EditModeToggle/EditModeToggle'), { ssr: false });
 
 const UpdateCurrentPage = () => {
 
   const {authUser,isAuthenticated}= useSelector((state:RootState)=>state.auth)
 
-  const { allPages } = useSelector((state: RootState) => state.pages)
+  const { allPages, isEditablePage } = useSelector((state: RootState) => state.pages)
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
   const hasLocalePrefix = SUPPORTED_LOCALES.includes(segments[0]);
@@ -55,19 +53,61 @@ const UpdateCurrentPage = () => {
   }, [allPages, slug])
 
   useEffect(() => {
-  
-    if(isAuthenticated && authUser && authUser?.isTenantOwner ){
-        dispatch(setEditMode(true))
-    }else{
-      dispatch(setEditMode(false))
+    // Only turn off edit mode if user is not authenticated or not the owner.
+    // Do not automatically enable edit mode on login.
+    if (!isAuthenticated || !authUser || !authUser.isTenantOwner) {
+      dispatch(setEditMode(false));
     }
-  }, [authUser,isAuthenticated]);
+  }, [authUser, isAuthenticated, dispatch]);
+
+  // Prevent link and button navigation when edit mode is active to facilitate inline editing without page traversal
+  useEffect(() => {
+    if (!isEditablePage) return;
+
+    const handleLinkClick = (e: MouseEvent) => {
+      let target = e.target as HTMLElement | null;
+      while (target && target !== document.body) {
+        if (target.tagName === 'A' || target.tagName === 'BUTTON') {
+          // Exclude Admin Bar and edit controls so dashboard access/mode toggling still works
+          if (
+            target.closest('[data-annotator-ui="true"]') ||
+            target.closest('.edit-mode-control') ||
+            target.closest('.admin-bar-class')
+          ) {
+            return;
+          }
+          e.preventDefault();
+          return;
+        }
+        target = target.parentElement;
+      }
+    };
+
+    document.addEventListener('click', handleLinkClick, true);
+    return () => {
+      document.removeEventListener('click', handleLinkClick, true);
+    };
+  }, [isEditablePage]);
+
+  // Restore authentication session from localStorage on page refresh
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userStr = localStorage.getItem('auth_user');
+      if (userStr) {
+        try {
+          const authData = JSON.parse(userStr);
+          if (authData && authData.access_token && authData.session) {
+            dispatch(setAuth(authData));
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+  }, [dispatch]);
 
   return (
-    <>
-      <GetAllPage />
-      <EditModeToggle />
-    </>
+    <GetAllPage />
   )
 }
 export default UpdateCurrentPage

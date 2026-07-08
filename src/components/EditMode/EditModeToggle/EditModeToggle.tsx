@@ -5,11 +5,12 @@ import { setEditMode } from '@/lib/store/pages/pagesSlice';
 import { RootState } from '@/lib/store/store';
 import { Pencil } from 'lucide-react';
 import { useSelector } from 'react-redux';
-
+import { useAnnotatorStore } from '@/components/annotationPlugin/store';
 
 export default function EditModeToggle() {
   const dispatch = useAppDispatch();
   const isEditable = useAppSelector((state) => state.pages.isEditablePage);
+  const { isCommentModeActive, toggleCommentMode } = useAnnotatorStore();
 
   const {authUser ,isAuthenticated}= useSelector((state:RootState)=>state.auth)
 
@@ -18,7 +19,11 @@ export default function EditModeToggle() {
         alert("You are not authorized to edit this page")
         return
     }
-    dispatch(setEditMode(!isEditable))
+    const nextEditable = !isEditable;
+    if (nextEditable && isCommentModeActive) {
+      toggleCommentMode();
+    }
+    dispatch(setEditMode(nextEditable));
   }
   return (
     <>
