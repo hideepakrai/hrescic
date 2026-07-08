@@ -14,6 +14,7 @@ export interface Annotation {
   content?: string;
   status?: CommentStatus;
   screenSize?: ScreenSize;
+  isLocked?: boolean;
   createdAt?: number;
 }
 
@@ -32,6 +33,7 @@ interface AnnotatorStore {
   removeAnnotation: (id: string) => void;
   updateAnnotationStatus: (id: string, status: CommentStatus) => void;
   updateAnnotationScreen: (id: string, screenSize: ScreenSize) => void;
+  updateAnnotationLock: (id: string, isLocked: boolean) => void;
   updateAnnotationPosition: (id: string, selector: string, offsetX: number, offsetY: number) => void;
   setActiveAnnotationId: (id: string | null) => void;
   updateSettings: (settings: Partial<AnnotatorSettings>) => void;
@@ -79,6 +81,10 @@ export const useAnnotatorStore = create<AnnotatorStore>()((set) => ({
 
   updateAnnotationScreen: (id, screenSize) => set((state) => ({
     annotations: state.annotations.map((a) => getAnnotationKey(a) === id ? { ...a, screenSize } : a)
+  })),
+
+  updateAnnotationLock: (id, isLocked) => set((state) => ({
+    annotations: state.annotations.map((a) => getAnnotationKey(a) === id ? { ...a, isLocked } : a)
   })),
 
   updateAnnotationPosition: (id, selector, offsetX, offsetY) => set((state) => ({

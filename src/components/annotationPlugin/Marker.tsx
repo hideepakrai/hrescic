@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Trash2, CheckCircle2, Clock, AlertCircle, MonitorSmartphone, GripHorizontal, Save } from 'lucide-react';
+import { MessageCircle, Trash2, CheckCircle2, Clock, AlertCircle, MonitorSmartphone, GripHorizontal, Save, Lock, Unlock } from 'lucide-react';
 import type { Annotation, CommentStatus, ScreenSize } from './store';
 import { useAnnotatorStore } from './store';
 import { isPointVisible, getCssSelector, getScreenSize, resolveTargetElement } from './utils';
@@ -32,6 +32,7 @@ export const Marker: React.FC<MarkerProps> = ({ annotation }) => {
     removeAnnotation,
     updateAnnotationStatus,
     updateAnnotationScreen,
+    updateAnnotationLock,
     updateAnnotationPosition,
     settings,
     annotations
@@ -106,6 +107,7 @@ export const Marker: React.FC<MarkerProps> = ({ annotation }) => {
   }, [annotation, isDragging]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (annotation.isLocked) return;
     e.stopPropagation();
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     hasDraggedRef.current = false;
@@ -207,6 +209,16 @@ export const Marker: React.FC<MarkerProps> = ({ annotation }) => {
     }
   };
 
+  const handleLockToggle = async () => {
+    const nextLocked = !annotation.isLocked;
+    updateAnnotationLock(annotationKey, nextLocked);
+    setActiveAnnotationId(annotationKey);
+    if (annotation._id) {
+      await saveCommentUpdate({ ...annotation, isLocked: nextLocked });
+      toast.success(nextLocked ? 'Pin position locked' : 'Pin position unlocked');
+    }
+  };
+
   const handleDeleteComment = async () => {
     try {
       if (annotation._id) {
@@ -234,7 +246,7 @@ export const Marker: React.FC<MarkerProps> = ({ annotation }) => {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full shadow-lg flex items-center justify-center text-white transition-transform ${isActive ? `${config.color.split(' ')[0]} scale-110 ring-4 ${config.color.split(' ')[1]}` : `${config.color.split(' ')[0]} hover:scale-110`
-          } ${isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'}`}
+          } ${annotation.isLocked ? 'cursor-pointer' : (isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab')}`}
         onClick={(e) => {
           if (hasDraggedRef.current) return;
           e.stopPropagation();
@@ -321,10 +333,19 @@ export const Marker: React.FC<MarkerProps> = ({ annotation }) => {
                   <Save size={12} />
                   Update
                 </button>
-                <div className="flex items-center gap-1 text-slate-400 text-xs" title="Drag pin to move">
-                  <GripHorizontal size={12} />
-                  <span>Draggable</span>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => void handleLockToggle()}
+                  className={`flex items-center gap-1 text-xs border rounded-md px-2 py-1 transition-all font-semibold ${
+                    annotation.isLocked
+                      ? "border-red-200 text-red-500 bg-red-50 hover:bg-red-100"
+                      : "border-slate-200 text-slate-500 bg-slate-50 hover:bg-slate-100"
+                  }`}
+                  title={annotation.isLocked ? "Pin position is locked. Click to unlock dragging." : "Pin is draggable. Click to lock position."}
+                >
+                  {annotation.isLocked ? <Lock size={12} /> : <Unlock size={12} />}
+                  <span>{annotation.isLocked ? "Locked" : "Draggable"}</span>
+                </button>
               </div>
             </div>
           </motion.div>

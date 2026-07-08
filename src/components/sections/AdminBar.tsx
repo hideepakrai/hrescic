@@ -7,10 +7,12 @@ import {
   Edit3,
   Eye,
   EyeOff,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { setEditMode } from "@/lib/store/pages/pagesSlice";
+import { logout } from "@/lib/store/auth/authSlice";
 import { RootState } from "@/lib/store/store";
 import { useAnnotatorStore } from "@/components/annotationPlugin/store";
 import { AnnotatorPlugin } from "@/components/annotationPlugin/AnnotatorPlugin";
@@ -113,6 +115,17 @@ export default function AdminBar() {
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit Mode {isEditablePage ? "ON" : "OFF"}</span>
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={() => dispatch(logout())}
+            style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", backgroundColor: "rgba(255,255,255,0.05)" }}
+            className="h-7 px-3 rounded-full flex items-center gap-1.5 transition-all text-[11px] font-semibold border hover:opacity-90 hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400"
+            title="Log Out"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Logout</span>
           </button>
 
           {/* Divider */}

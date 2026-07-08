@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import GetAllPage from "./GetAllPage";
 
 import { setCurrentPages, setEditMode } from "@/lib/store/pages/pagesSlice";
+import { setAuth } from "@/lib/store/auth/authSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { RootState } from "@/lib/store/store";
 import { SUPPORTED_LOCALES } from "@/lib/i18n";
@@ -52,13 +53,12 @@ const UpdateCurrentPage = () => {
   }, [allPages, slug])
 
   useEffect(() => {
-  
-    if(isAuthenticated && authUser && authUser?.isTenantOwner ){
-        dispatch(setEditMode(true))
-    }else{
-      dispatch(setEditMode(false))
+    // Only turn off edit mode if user is not authenticated or not the owner.
+    // Do not automatically enable edit mode on login.
+    if (!isAuthenticated || !authUser || !authUser.isTenantOwner) {
+      dispatch(setEditMode(false));
     }
-  }, [authUser,isAuthenticated]);
+  }, [authUser, isAuthenticated, dispatch]);
 
   // Prevent link and button navigation when edit mode is active to facilitate inline editing without page traversal
   useEffect(() => {
@@ -88,6 +88,23 @@ const UpdateCurrentPage = () => {
       document.removeEventListener('click', handleLinkClick, true);
     };
   }, [isEditablePage]);
+
+  // Restore authentication session from localStorage on page refresh
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const userStr = localStorage.getItem('auth_user');
+      if (userStr) {
+        try {
+          const authData = JSON.parse(userStr);
+          if (authData && authData.access_token && authData.session) {
+            dispatch(setAuth(authData));
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+  }, [dispatch]);
 
   return (
     <GetAllPage />
