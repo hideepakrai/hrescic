@@ -595,20 +595,26 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
               multiline
             />
           </div>
-          <div className="mx-auto mt-8 md:container-xl lg:px-[108px]">
+          <div className={`mx-auto mt-8 max-w-6xl ${isTourism ? "" : "lg:px-[108px]"}`}>
             {(() => {
               const structureImage = structure.image || theme.structureImage;
               return (
                 <div 
-                  className={`overflow-hidden lg:grid lg:grid-cols-[0.95fr_1.05fr] ${
-                    structure.images ? "bg-white border border-gray-200 rounded-[16px] p-4" : "rounded-t-xl"
+                  className={`relative overflow-hidden lg:grid lg:grid-cols-[1.1fr_0.9fr] ${
+                    structure.images ? "bg-white border border-gray-200 rounded-[16px] p-4" : "rounded-t-[20px]"
                   }`}
-                  style={!structure.images ? { backgroundColor: theme.structureCardBg || theme.growthBg } : undefined}
+                  style={!structure.images ? { backgroundColor: isTourism ? theme.bgColor : (theme.structureCardBg || theme.growthBg) } : undefined}
                 >
+                  {isTourism && !structure.images && (
+                    <div 
+                      className="absolute inset-0 z-0 hidden lg:block bg-cover bg-right bg-no-repeat"
+                      style={{ backgroundImage: `url(${structureImage})` }}
+                    />
+                  )}
                   {structure.images ? (
                     <>
                       {isEditable ? (
-                        <div className="flex flex-col gap-2 p-4 w-full justify-center">
+                        <div className="relative z-10 flex flex-col gap-2 p-4 w-full justify-center">
                           <div>
                             <span className="text-xs text-gray-400">Full Text:</span>
                             <EditableText
@@ -634,13 +640,13 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
+                        <div className="relative z-10 flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
                           <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]" style={{ color: theme.textColor, fontFamily: "Georgia, Times New Roman, serif" }}>
                             {renderHighlightedText(structure.fullText, structure.accentText, "#CE1DB7", theme.textColor)}
                           </p>
                         </div>
                       )}
-                      <div className="grid grid-cols-2 gap-4 p-4">
+                      <div className="relative z-10 grid grid-cols-2 gap-4 p-4">
                         <div className="col-span-1 row-span-2 rounded-[12px] overflow-hidden bg-[#F2EAF8]">
                           <img src={structure.images.big} alt="" className="h-full w-full object-cover" />
                         </div>
@@ -655,7 +661,7 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                   ) : structureImage ? (
                     <>
                       {isEditable ? (
-                        <div className="flex flex-col gap-2 p-4 w-full justify-center">
+                        <div className="relative z-10 flex flex-col gap-2 p-4 w-full justify-center">
                           <div>
                             <span className="text-xs text-gray-400">Full Text:</span>
                             <EditableText
@@ -681,16 +687,22 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-[25px]">
-                          <p className="text-center text-[22px] sm:text-[24px] md:text-[26px] font-normal leading-[1.38] tracking-[-0.015em]"
+                        <div className={`relative z-10 flex items-center justify-center px-5 py-10 sm:px-8 sm:py-14 ${isTourism ? "lg:px-[60px]" : "lg:px-[25px]"}`}>
+                          <p className={`text-center text-[22px] sm:text-[26px] md:text-[28px] font-normal leading-[1.4] tracking-[-0.015em] ${isTourism ? "max-w-[500px]" : ""}`}
                             style={{ fontFamily: "Georgia, Times New Roman, serif", color: isTourism ? "#ffffff" : "#73635b" }}>
                             {renderHighlightedText(structure.fullText, structure.accentText, theme.accentColor, isTourism ? "#ffffff" : "#73635b")}
                           </p>
                         </div>
                       )}
-                      <div className="h-full min-h-[220px] sm:min-h-[260px]">
-                        <img src={structureImage} alt="" className="h-full w-full object-cover" />
-                      </div>
+                      {isTourism ? (
+                        <div className="relative z-10 w-full flex items-center justify-center lg:hidden pb-8 px-4">
+                          <img src={structureImage} alt="" className="w-full max-h-[350px] object-contain md:block hidden" />
+                        </div>
+                      ) : (
+                        <div className="relative z-10 h-full min-h-[250px] sm:min-h-[300px] flex items-center justify-center p-4">
+                          <img src={structureImage} alt="" className="h-full object-cover w-full" />
+                        </div>
+                      )}
                     </>
                   ) : (
                     <>
@@ -741,7 +753,7 @@ export default function IndustrySubPage({ data }: { data: IndustryData }) {
                   editable={isEditable}
                   onChange={handleChange(`props.structure.bottomText.${locale}`)}
                   tag="p"
-                  className="text-[18px] sm:text-[22px]"
+                  className="text-[16px] px-4 sm:text-[22px]"
                   style={{ fontFamily: "Georgia, Times New Roman, serif", color: structure.images ? theme.textColor : "#fff" }}
                   multiline
                 />

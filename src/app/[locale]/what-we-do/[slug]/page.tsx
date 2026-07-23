@@ -5,25 +5,21 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageBlock } from "@/lib/store/pages/pageType";
 
-const API_BASE = (process.env.FASTAPI_URL || "https://admin.kalptree.xyz/api").replace("/api", "/cms/api");
+import brandingStrategyData from "@/lib/data/pages/what-we-do/sub/branding-strategy.json";
+import webDigitalData from "@/lib/data/pages/what-we-do/sub/web-digital.json";
+import contentMarketingData from "@/lib/data/pages/what-we-do/sub/content-marketing.json";
+import aiVideoProductionData from "@/lib/data/pages/what-we-do/sub/ai-video-production.json";
+
 const validSlugs = ["branding-strategy", "web-digital", "content-marketing", "ai-video-production"] as const;
 
-async function fetchSubPageContent(slug: string) {
-  const res = await fetch(`${API_BASE}/pages?slug=what-we-do/${slug}`, {
-    headers: {
-      accept: "application/json",
-      "x-tenant-db": "kp_hrescic",
-    },
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) return null;
-  const body = await res.json();
-  const page = body?.data ?? (Array.isArray(body) ? body[0] : body);
-  return {
-    sections: (Array.isArray(page?.content) ? page.content : []) as PageBlock[],
-    metaTitle: page?.metaTitle ?? null,
-    metaDescription: page?.metaDescription ?? null,
-  };
+function getSubPageData(slug: string) {
+  switch (slug) {
+    case "branding-strategy": return brandingStrategyData;
+    case "web-digital": return webDigitalData;
+    case "content-marketing": return contentMarketingData;
+    case "ai-video-production": return aiVideoProductionData;
+    default: return null;
+  }
 }
 
 interface Props {
@@ -40,22 +36,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!validSlugs.includes(slug as typeof validSlugs[number])) return {};
-  const data = await fetchSubPageContent(slug);
+  const data = getSubPageData(slug);
   if (!data?.metaTitle) return {};
   return {
-    title: getLocalizedString(data.metaTitle, locale as LocaleCode),
-    description: data.metaDescription ? getLocalizedString(data.metaDescription, locale as LocaleCode) : "",
+    title: getLocalizedString(data.metaTitle as any, locale as LocaleCode),
+    description: data.metaDescription ? getLocalizedString(data.metaDescription as any, locale as LocaleCode) : "",
   };
 }
 
 export default async function SubPage({ params }: Props) {
   const { locale, slug } = await params;
   if (!validSlugs.includes(slug as typeof validSlugs[number])) notFound();
-  const data = await fetchSubPageContent(slug);
+  const data = getSubPageData(slug);
   if (!data) notFound();
+  
+  const sections = (data.content || []) as PageBlock[];
+  
   return (
     <main>
-      <WhatWeDoSubPageRenderer sections={data.sections} locale={locale as LocaleCode} slug={slug} />
+      <WhatWeDoSubPageRenderer sections={sections} locale={locale as LocaleCode} slug={slug} />
     </main>
   );
 }

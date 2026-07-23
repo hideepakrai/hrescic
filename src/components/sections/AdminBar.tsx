@@ -71,22 +71,22 @@ export default function AdminBar() {
       style={{ backgroundColor: "#1D2931" }}
       className="max-w-8xl mx-auto  text-white text-[13px] font-sans border-b border-white/10 relative z-[9999] select-none"
     >
-      <div className="max-w-8xl px-4 h-11 flex items-center justify-between">
+      <div className="max-w-8xl px-2 sm:px-4 h-11 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
 
         {/* Left — Dashboard link */}
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           
           <Link
             href="/kalpauth"
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-200 font-bold uppercase tracking-wider text-[11px]"
           >
             <LayoutDashboard className="w-3.5 h-3.5" style={{ color: "#41C717" }} />
-            <span>ADMIN DASHBOARD </span>
+            <span className="hidden sm:inline">ADMIN DASHBOARD</span>
           </Link>
         </div>
 
         {/* Right — Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
 
           {/* Comments toggle */}
           <button
@@ -96,10 +96,11 @@ export default function AdminBar() {
                 ? { borderColor: "#41C717", color: "#41C717", backgroundColor: "rgba(65,199,23,0.1)" }
                 : { borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", backgroundColor: "rgba(255,255,255,0.05)" }
             }
-            className="h-7 px-3 rounded-full flex items-center gap-2 transition-all border text-[11px] font-semibold hover:opacity-90"
+            className="h-7 px-3 rounded-full flex items-center gap-1.5 sm:gap-2 transition-all border text-[10px] sm:text-[11px] font-semibold hover:opacity-90"
           >
             <MessageSquare className="w-3.5 h-3.5" />
-            <span>{isCommentModeActive ? "Hide Comments" : `Show Comments (${commentCount})`}</span>
+            <span className="hidden sm:inline">{isCommentModeActive ? "Hide Comments" : `Show Comments (${commentCount})`}</span>
+            <span className="sm:hidden">{commentCount}</span>
           </button>
 
           {/* Edit Mode — connected to real Redux state */}
@@ -110,11 +111,12 @@ export default function AdminBar() {
                 ? { backgroundColor: "#41C717", borderColor: "#41C717", color: "#1D2931", boxShadow: "0 0 12px rgba(65,199,23,0.45)" }
                 : { borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)", backgroundColor: "rgba(255,255,255,0.05)" }
             }
-            className="h-7 px-3 rounded-full flex items-center gap-1.5 transition-all text-[11px] font-semibold border hover:opacity-90"
+            className="h-7 px-3 rounded-full flex items-center gap-1 sm:gap-1.5 transition-all text-[10px] sm:text-[11px] font-semibold border hover:opacity-90"
             title={isEditablePage ? "Disable edit mode" : "Enable edit mode"}
           >
             <Edit3 className="w-3.5 h-3.5" />
-            <span>Edit Mode {isEditablePage ? "ON" : "OFF"}</span>
+            <span className="hidden sm:inline">Edit Mode {isEditablePage ? "ON" : "OFF"}</span>
+            <span className="sm:hidden">Edit</span>
           </button>
 
           {/* Logout Button */}
@@ -125,11 +127,11 @@ export default function AdminBar() {
             title="Log Out"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Logout</span>
+            <span className="hidden sm:inline">Logout</span>
           </button>
 
           {/* Divider */}
-          <span className="text-white/20 select-none">|</span>
+          <span className="text-white/20 select-none hidden sm:inline">|</span>
 
           {/* Hide button */}
           <button
