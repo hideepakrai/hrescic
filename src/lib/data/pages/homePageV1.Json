@@ -12,16 +12,16 @@
       "adminTitle": "Hero Section",
       "props": {
         "heading": {
-          "en": "Elite Marketing Expertise, Ready When You Need It",
-          "hr": "Elite Marketing Ekspertiza, spremna kad vam zatreba"
+          "en": "If your website isn't bringing you business, it's just an expense.",
+          "hr": "Ako vaša web stranica ne donosi posao, ona je samo trošak."
         },
         "subheading": {
-          "en": "Access premium creative and strategic talent that integrates seamlessly with your business, precisely when, and how you need it.",
-          "hr": "Pristupite premium kreativnim i strateškim talentima koji se neprimjetno integriraju s vašim poslovanjem, točno onda i onako kako vam je potrebno."
+          "en": "Every decision we make has one goal: turning more of your visitors into enquiries, bookings, or customers.",
+          "hr": "Svaku odluku donosimo s jednim ciljem – više upita, rezervacija i prodaje."
         },
         "primaryButtonText": {
-          "en": "Let's Talk",
-          "hr": "Razgovarajmo"
+          "en": "Book a Free Demo",
+          "hr": "Rezervirajte besplatni demo"
         },
         "primaryButtonHref": "/lets-talk",
         "secondaryButtonText": {

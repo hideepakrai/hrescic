@@ -79,8 +79,14 @@
           ]
         },
         "intro": {
-          "en": "Castania was built from zero to a premium honey brand. What began as a small producer evolved into a scalable, recognizable, and commercially strong business through strategic positioning, storytelling, packaging, and a complete sales ecosystem.\n\nThis was not a packaging refresh or a visual exercise — it was the deliberate creation of a brand, and the foundation of a sustainable business.",
-          "hr": "Castania je izgrađena od nule do premium brenda meda. Ono što je započelo kao mali proizvođač evoluiralo je u skalabilno, prepoznatljivo i komercijalno snažno poslovanje kroz strateško pozicioniranje, pripovijedanje, pakiranje i cjelovit prodajni ekosustav.\n\nOvo nije bilo osvježavanje ambalaže ili vizualna vježba — to je bilo namjerno stvaranje brenda i temelj održivog poslovanja."
+          "heading": {
+            "en": "Castania was built from zero to a premium honey brand.",
+            "hr": "Castania je izgrađena od nule do premium brenda meda."
+          },
+          "text": {
+            "en": "What began as a small producer evolved into a scalable, recognizable, and commercially strong business through strategic positioning, storytelling, packaging, and a complete sales ecosystem.\n\nThis was not a packaging refresh or a visual exercise — it was the deliberate creation of a brand, and the foundation of a sustainable business.",
+            "hr": "Ono što je započelo kao mali proizvođač evoluiralo je u skalabilno, prepoznatljivo i komercijalno snažno poslovanje kroz strateško pozicioniranje, pripovijedanje, pakiranje i cjelovit prodajni ekosustav.\n\nOvo nije bilo osvježavanje ambalaže ili vizualna vježba — to je bilo namjerno stvaranje brenda i temelj održivog poslovanja."
+          }
         },
         "challenge": {
           "heading": {

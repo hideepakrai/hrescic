@@ -18,10 +18,11 @@ function findBlock(sections: PageBlock[], type: string) {
 
 export default function WhatWeDoPageRenderer({ sections, locale }: { sections: PageBlock[]; locale: LocaleCode }) {
   const currentPages = useAppSelector((state) => state.pages.currentPages);
+  const isEditablePage = useAppSelector((state) => state.pages.isEditablePage);
 
   // Only use Redux currentPages content if its slug matches this page
   const reduxSections =
-    currentPages?.slug === "what-we-do"
+    isEditablePage && currentPages?.slug === "what-we-do"
       ? (currentPages.content as PageBlock[] | undefined)
       : undefined;
 

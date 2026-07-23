@@ -1451,12 +1451,15 @@ function CastaniaPage({ data }: { data: CaseStudyData }) {
         <section className="w-full px-3 pb-6 pt-6 sm:px-5 sm:pb-8 lg:py-14">
           <div className="mx-auto container-xl">
             <div className="text-center">
-              <div className="mx-auto max-w-[84%]">
-                <p className="text-[18px] sm:text-[22px] md:text-[26px] lg:text-[28px] font-normal leading-[1.3] text-[#555555]" style={{ fontFamily: "Georgia, Times New Roman, serif" }}>
-                  {String(data.intro).split('\\n\\n').map((paragraph, i) => (
+              <div className="mx-auto max-w-2xl ">
+                <h2 className="a text-[26px] sm:text-[31px] md:text-[38px] lg:text-[40px] font-normal leading-[1.2] tracking-[-0.02em] text-[#555555]">
+                  {et("intro.heading", data.intro.heading)}
+                </h2>
+                <p className="mx-auto mt-6 text-[15px] sm:text-[18px] leading-[1.55] text-[#555555]">
+                  {String(et("intro.text", data.intro.text)).split('\\n\\n').map((paragraph, i, arr) => (
                     <span key={i}>
                       {paragraph}
-                      {i !== String(data.intro).split('\\n\\n').length - 1 && (
+                      {i !== arr.length - 1 && (
                         <>
                           <br />
                           <br />

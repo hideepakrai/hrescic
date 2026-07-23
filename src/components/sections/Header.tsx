@@ -71,6 +71,13 @@ export default function Header({ locale }: { locale: LocaleCode }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+  
+  const toggleMenu = (href: string) => {
+    setExpandedMenus((prev) => 
+      prev.includes(href) ? prev.filter((h) => h !== href) : [...prev, href]
+    );
+  };
   
   // Menu and language dropdown states
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -106,6 +113,16 @@ export default function Header({ locale }: { locale: LocaleCode }) {
       return `/${targetLocale}${pathname}`;
     }
     return segments.join("/");
+  };
+
+  const checkIsActive = (href: string) => {
+    if (!pathname) return false;
+    const withEn = `/en${href}`;
+    const withHr = `/hr${href}`;
+    return (
+      pathname === href || pathname === withEn || pathname === withHr ||
+      pathname.startsWith(`${href}/`) || pathname.startsWith(`${withEn}/`) || pathname.startsWith(`${withHr}/`)
+    );
   };
 
   if (pathname?.startsWith("/admin")) {
@@ -165,7 +182,7 @@ export default function Header({ locale }: { locale: LocaleCode }) {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-6">
               {navItems.map((item) => {
-                const isActive = pathname === localizedHref(item.href) || pathname?.startsWith(localizedHref(item.href) + "/");
+                const isActive = checkIsActive(item.href);
                 const isWhatWeDo = item.href === "/what-we-do";
                 const isWhoWeCreateFor = item.href === "/who-we-create-for";
                 const isLetsTalk = item.href === "/lets-talk";
@@ -503,35 +520,57 @@ export default function Header({ locale }: { locale: LocaleCode }) {
         {/* Mobile Menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white w-full absolute border-b border-gray-100 shadow-lg ${
-            mobileOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+            mobileOpen ? "max-h-[calc(100vh-80px)] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
           }`}
         >
-          <nav className="flex flex-col px-4 pt-2 pb-6 space-y-4">
-            {navItems.map((item) => (
+          <nav className="flex flex-col px-4 pt-2 pb-6 space-y-4 overflow-y-auto max-h-[calc(100vh-80px)]">
+            {navItems.map((item) => {
+              const isItemActive = checkIsActive(item.href);
+              return (
               <div key={item.label}>
-                <Link
-                  href={localizedHref(item.href)}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-base font-semibold text-gray-900 hover:text-[#37c100] block py-1"
-                >
-                  {item.label}
-                </Link>
-                {item.children && item.children.length > 0 && (
-                  <div className="ml-4 mt-2 space-y-2 mb-3 border-l-2 border-gray-100 pl-3">
-                    {item.children.map((child) => (
+                <div className="flex items-center justify-between">
+                  <Link
+                    href={localizedHref(item.href)}
+                    onClick={() => setMobileOpen(false)}
+                    className={`text-base font-semibold block py-1 flex-1 transition-colors ${isItemActive ? "text-[#37c100]" : "text-gray-900 hover:text-[#37c100]"}`}
+                  >
+                    {item.label}
+                  </Link>
+                  {item.children && item.children.length > 0 && (
+                    <button
+                      onClick={() => toggleMenu(item.href)}
+                      className={`p-2 hover:text-[#37c100] ${isItemActive ? "text-[#37c100]" : "text-gray-500"}`}
+                    >
+                      <svg
+                        className={`w-5 h-5 transition-transform duration-200 ${expandedMenus.includes(item.href) ? "rotate-180" : ""}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+                {item.children && item.children.length > 0 && expandedMenus.includes(item.href) && (
+                  <div className="mt-3 space-y-4 mb-4 ml-2">
+                    {item.children.map((child) => {
+                      const isChildActive = checkIsActive(child.href);
+                      return (
                       <Link
                         key={child.label}
                         href={localizedHref(child.href)}
                         onClick={() => setMobileOpen(false)}
-                        className="block text-sm font-medium text-gray-600 hover:text-[#37c100]"
+                        className={`block text-[15px] font-medium transition-colors ${isChildActive ? "text-[#37c100]" : "text-gray-600 hover:text-[#37c100]"}`}
                       >
                         {child.label}
                       </Link>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
-            ))}
+            )})}
             
             <div className="pt-2">
               <Link

@@ -17,9 +17,10 @@ const sectionRegistry: Record<string, React.FC<{ block: PageBlock }>> = {
 
 export default function WhoWeCreateForPageRenderer({ sections, locale }: { sections: PageBlock[]; locale: LocaleCode }) {
   const currentPages = useAppSelector((state) => state.pages.currentPages);
+  const isEditablePage = useAppSelector((state) => state.pages.isEditablePage);
   // Only use Redux currentPages content if its slug matches this page
   const reduxSections =
-    currentPages?.slug === "who-we-create-for"
+    isEditablePage && currentPages?.slug === "who-we-create-for"
       ? (currentPages.content as PageBlock[] | undefined)
       : undefined;
   const activeSections = reduxSections ?? sections;
